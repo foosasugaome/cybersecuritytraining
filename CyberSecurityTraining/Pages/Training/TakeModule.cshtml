@@ -124,8 +124,8 @@
                     <div class="card-body">
                         <!-- Lesson Content -->
                         <div class="lesson-content mb-4">
-                            @* Render lesson content as HTML (assuming it's stored as HTML or markdown converted to HTML) *@
-                            @Html.Raw(currentLesson.Lesson.Content)
+                            @* Render lesson content as HTML converted from Markdown *@
+                            @Html.Raw(Model.CurrentLessonHtmlContent)
                         </div>
 
                         <!-- Lesson Completion -->
@@ -211,14 +211,45 @@
     font-size: 1.1rem;
 }
 
-.lesson-content h1, .lesson-content h2, .lesson-content h3 {
+.lesson-content h1 {
     color: #2c3e50;
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-top: 2rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 3px solid #007bff;
+    padding-bottom: 0.5rem;
+}
+
+.lesson-content h2 {
+    color: #34495e;
+    font-size: 1.8rem;
+    font-weight: 600;
     margin-top: 2rem;
     margin-bottom: 1rem;
+    border-bottom: 2px solid #6c757d;
+    padding-bottom: 0.3rem;
+}
+
+.lesson-content h3 {
+    color: #495057;
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.lesson-content h4 {
+    color: #6c757d;
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-top: 1.5rem;
+    margin-bottom: 0.8rem;
 }
 
 .lesson-content p {
     margin-bottom: 1.2rem;
+    text-align: justify;
 }
 
 .lesson-content ul, .lesson-content ol {
@@ -230,6 +261,16 @@
     margin-bottom: 0.5rem;
 }
 
+.lesson-content strong {
+    color: #2c3e50;
+    font-weight: 600;
+}
+
+.lesson-content em {
+    color: #495057;
+    font-style: italic;
+}
+
 .lesson-content blockquote {
     border-left: 4px solid #007bff;
     padding-left: 1rem;
@@ -237,13 +278,17 @@
     background-color: #f8f9fa;
     padding: 1rem;
     border-radius: 0.375rem;
+    font-style: italic;
+    color: #495057;
 }
 
 .lesson-content code {
     background-color: #f8f9fa;
     padding: 0.2rem 0.4rem;
     border-radius: 0.25rem;
-    font-family: 'Monaco', 'Menlo', monospace;
+    font-family: 'Monaco', 'Menlo', 'Consolas', monospace;
+    color: #e83e8c;
+    font-size: 0.9em;
 }
 
 .lesson-content pre {
@@ -251,5 +296,38 @@
     padding: 1rem;
     border-radius: 0.375rem;
     overflow-x: auto;
+    border: 1px solid #dee2e6;
+}
+
+.lesson-content pre code {
+    background-color: transparent;
+    padding: 0;
+    color: #495057;
+}
+
+.lesson-content table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+    border: 1px solid #dee2e6;
+}
+
+.lesson-content th,
+.lesson-content td {
+    padding: 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.lesson-content th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+    color: #495057;
+}
+
+.lesson-content hr {
+    margin: 2rem 0;
+    border: none;
+    border-top: 2px solid #dee2e6;
 }
 </style>

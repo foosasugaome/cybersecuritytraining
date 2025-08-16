@@ -25,6 +25,7 @@ namespace CyberSecurityTraining.Data
         public DbSet<UserQuestionAnswer> UserQuestionAnswers { get; set; }
         public DbSet<UserModuleAssignment> UserModuleAssignments { get; set; }
         public DbSet<GroupModuleAssignment> GroupModuleAssignments { get; set; }
+        public DbSet<UserComprehensiveCertificate> UserComprehensiveCertificates { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

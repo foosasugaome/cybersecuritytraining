@@ -30,6 +30,8 @@ namespace CyberSecurityTraining.Pages.Training
         public List<UserQuizResult> RecentQuizResults { get; set; } = new();
         public int CompletedModulesCount { get; set; }
         public double OverallProgress { get; set; }
+        public bool HasComprehensiveCertificate { get; set; }
+        public bool AllModulesCompleted { get; set; }
 
         public class ModuleWithProgress
         {
@@ -103,6 +105,17 @@ namespace CyberSecurityTraining.Pages.Training
             if (AssignedModules.Any())
             {
                 OverallProgress = AssignedModules.Average(m => m.CompletionPercentage);
+                AllModulesCompleted = CompletedModulesCount == AssignedModules.Count;
+            }
+
+            // Check for comprehensive certificate
+            HasComprehensiveCertificate = await _progressService.HasComprehensiveCertificateAsync(CurrentUser.Id);
+            
+            // If user doesn't have comprehensive certificate but all modules are completed, trigger the check
+            if (!HasComprehensiveCertificate && AllModulesCompleted)
+            {
+                await _progressService.CheckAndIssueComprehensiveCertificateAsync(CurrentUser.Id);
+                HasComprehensiveCertificate = await _progressService.HasComprehensiveCertificateAsync(CurrentUser.Id);
             }
 
             return Page();

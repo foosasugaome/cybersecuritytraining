@@ -15,12 +15,14 @@ namespace CyberSecurityTraining.Pages.Training
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IProgressService _progressService;
+        private readonly IMarkdownService _markdownService;
 
-        public TakeModuleModel(ApplicationDbContext context, UserManager<ApplicationUser> userManager, IProgressService progressService)
+        public TakeModuleModel(ApplicationDbContext context, UserManager<ApplicationUser> userManager, IProgressService progressService, IMarkdownService markdownService)
         {
             _context = context;
             _userManager = userManager;
             _progressService = progressService;
+            _markdownService = markdownService;
         }
 
         public Module Module { get; set; } = default!;
@@ -30,6 +32,19 @@ namespace CyberSecurityTraining.Pages.Training
         public int CurrentLessonIndex { get; set; }
         public bool HasAccess { get; set; }
         public double CompletionPercentage { get; set; }
+
+        public string CurrentLessonHtmlContent
+        {
+            get
+            {
+                if (Lessons.Count > CurrentLessonIndex)
+                {
+                    var currentLesson = Lessons[CurrentLessonIndex];
+                    return _markdownService.ToHtml(currentLesson.Lesson.Content);
+                }
+                return string.Empty;
+            }
+        }
 
         public class LessonInfo
         {

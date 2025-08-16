@@ -40,6 +40,7 @@ builder.Services.AddAuthorization(options =>
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<ICertificateService, CertificateService>();
 builder.Services.AddScoped<IProgressService, ProgressService>();
+builder.Services.AddScoped<IMarkdownService, MarkdownService>();
 
 builder.Services.AddRazorPages(options =>
 {
@@ -57,6 +58,10 @@ using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
     await context.Database.EnsureCreatedAsync();
+    
+    // Fix existing completed modules that don't have certificate flags set
+    var progressService = scope.ServiceProvider.GetRequiredService<IProgressService>();
+    await progressService.FixCompletedModuleCertificatesAsync();
 }
 
 // Configure the HTTP request pipeline.

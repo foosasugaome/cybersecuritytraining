@@ -94,6 +94,48 @@
         </div>
     </div>
 
+    <!-- Comprehensive Certificate Section -->
+    @if (Model.AllModulesCompleted)
+    {
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card border-left-primary shadow">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-md-8">
+                                <h5 class="text-primary mb-2">
+                                    <i class="fas fa-certificate text-warning"></i> 
+                                    Cybersecurity Training Certificate
+                                </h5>
+                                <p class="mb-2">
+                                    Congratulations! You have successfully completed all assigned cybersecurity training modules.
+                                </p>
+                                <p class="text-muted mb-0">
+                                    <strong>Modules Completed:</strong> @Model.CompletedModulesCount 
+                                    | <strong>Overall Progress:</strong> @Math.Round(Model.OverallProgress, 1)%
+                                </p>
+                            </div>
+                            <div class="col-md-4 text-right">
+                                @if (Model.HasComprehensiveCertificate)
+                                {
+                                    <a asp-page="/Training/Certificate" class="btn btn-primary btn-lg">
+                                        <i class="fas fa-download"></i> Download Certificate
+                                    </a>
+                                }
+                                else
+                                {
+                                    <div class="text-muted">
+                                        <i class="fas fa-clock"></i> Certificate being prepared...
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
     <!-- Training Modules -->
     <div class="row">
         <div class="col-lg-8">
@@ -143,10 +185,6 @@
                                             {
                                                 <a asp-page="/Training/TakeModule" asp-route-id="@moduleWithProgress.Module.Id" class="btn btn-outline-success mb-2">
                                                     <i class="fas fa-eye"></i> Review
-                                                </a>
-                                                <br />
-                                                <a href="/Training/Certificate?moduleId=@moduleWithProgress.Module.Id" class="btn btn-outline-primary">
-                                                    <i class="fas fa-certificate"></i> Certificate
                                                 </a>
                                             }
                                             else if (moduleWithProgress.Progress?.Status == ProgressStatus.InProgress)

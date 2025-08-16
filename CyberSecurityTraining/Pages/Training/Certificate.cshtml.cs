@@ -32,19 +32,55 @@ namespace CyberSecurityTraining.Pages.Training
         public Module Module { get; set; } = default!;
         public UserModuleProgress ModuleProgress { get; set; } = default!;
         public ApplicationUser CurrentUser { get; set; } = default!;
+        public UserComprehensiveCertificate? ComprehensiveCertificate { get; set; }
+        public List<Module> CompletedModules { get; set; } = new();
+        public bool IsComprehensiveCertificate { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? moduleId)
         {
-            if (moduleId == null)
-            {
-                return NotFound();
-            }
-
             CurrentUser = await _userManager.GetUserAsync(User);
             if (CurrentUser == null)
             {
                 return Challenge();
             }
+
+            // Check if this is a comprehensive certificate request (no moduleId)
+            if (moduleId == null)
+            {
+                return await HandleComprehensiveCertificateAsync();
+            }
+
+            // Handle individual module certificate (legacy support)
+            return await HandleModuleCertificateAsync(moduleId.Value);
+        }
+
+        private async Task<IActionResult> HandleComprehensiveCertificateAsync()
+        {
+            IsComprehensiveCertificate = true;
+
+            // Get comprehensive certificate
+            ComprehensiveCertificate = await _context.UserComprehensiveCertificates
+                .FirstOrDefaultAsync(c => c.UserId == CurrentUser!.Id);
+
+            if (ComprehensiveCertificate == null)
+            {
+                TempData["ErrorMessage"] = "Comprehensive certificate is not yet available. Complete all assigned modules first.";
+                return RedirectToPage("/Training/Dashboard");
+            }
+
+            // Get completed modules for display
+            var moduleIds = System.Text.Json.JsonSerializer.Deserialize<List<int>>(ComprehensiveCertificate.CompletedModuleIds);
+            CompletedModules = await _context.Modules
+                .Where(m => moduleIds!.Contains(m.Id))
+                .OrderBy(m => m.Order)
+                .ToListAsync();
+
+            return Page();
+        }
+
+        private async Task<IActionResult> HandleModuleCertificateAsync(int moduleId)
+        {
+            IsComprehensiveCertificate = false;
 
             Module = await _context.Modules
                 .Where(m => m.Id == moduleId && m.IsActive)
@@ -64,7 +100,7 @@ namespace CyberSecurityTraining.Pages.Training
 
             // Get module progress
             ModuleProgress = await _context.UserModuleProgress
-                .Where(p => p.UserId == CurrentUser.Id && p.ModuleId == Module.Id)
+                .Where(p => p.UserId == CurrentUser!.Id && p.ModuleId == Module.Id)
                 .FirstOrDefaultAsync();
 
             if (ModuleProgress == null || ModuleProgress.Status != ProgressStatus.Completed || !ModuleProgress.CertificateIssued)
@@ -76,7 +112,62 @@ namespace CyberSecurityTraining.Pages.Training
             return Page();
         }
 
-        public async Task<IActionResult> OnPostDownloadAsync(int moduleId)
+        public async Task<IActionResult> OnPostDownloadAsync(int? moduleId)
+        {
+            CurrentUser = await _userManager.GetUserAsync(User);
+            if (CurrentUser == null)
+            {
+                return Challenge();
+            }
+
+            // Check if this is a comprehensive certificate download
+            if (moduleId == null)
+            {
+                return await DownloadComprehensiveCertificateAsync();
+            }
+
+            // Handle individual module certificate download (legacy support)
+            return await DownloadModuleCertificateAsync(moduleId.Value);
+        }
+
+        private async Task<IActionResult> DownloadComprehensiveCertificateAsync()
+        {
+            var comprehensiveCertificate = await _context.UserComprehensiveCertificates
+                .FirstOrDefaultAsync(c => c.UserId == CurrentUser!.Id);
+
+            if (comprehensiveCertificate == null)
+            {
+                TempData["ErrorMessage"] = "Comprehensive certificate is not available.";
+                return RedirectToPage();
+            }
+
+            try
+            {
+                // Get completed modules for certificate generation
+                var moduleIds = System.Text.Json.JsonSerializer.Deserialize<List<int>>(comprehensiveCertificate.CompletedModuleIds);
+                var completedModules = await _context.Modules
+                    .Where(m => moduleIds!.Contains(m.Id))
+                    .OrderBy(m => m.Order)
+                    .ToListAsync();
+
+                var certificateBytes = await _certificateService.GenerateCompletionCertificateAsync(CurrentUser, completedModules);
+                var fileName = $"CyberSecurity_Certificate_{CurrentUser.FirstName}_{CurrentUser.LastName}.pdf";
+
+                // Update download tracking
+                comprehensiveCertificate.DownloadedAt = DateTime.UtcNow;
+                comprehensiveCertificate.DownloadCount++;
+                await _context.SaveChangesAsync();
+
+                return File(certificateBytes, "application/pdf", fileName);
+            }
+            catch (Exception)
+            {
+                TempData["ErrorMessage"] = "An error occurred while generating the certificate. Please try again.";
+                return RedirectToPage();
+            }
+        }
+
+        private async Task<IActionResult> DownloadModuleCertificateAsync(int moduleId)
         {
             CurrentUser = await _userManager.GetUserAsync(User);
             if (CurrentUser == null)
