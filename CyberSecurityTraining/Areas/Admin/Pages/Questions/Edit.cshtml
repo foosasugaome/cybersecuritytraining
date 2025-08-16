@@ -1,0 +1,313 @@
+@page "/Questions/Edit/{id:int}"
+@model CyberSecurityTraining.Areas.Admin.Pages.Questions.EditModel
+@{
+    ViewData["Title"] = "Edit Question";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="h3 mb-0">Edit Question</h1>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-0">
+                        <li class="breadcrumb-item"><a asp-area="Admin" asp-page="/Dashboard">Dashboard</a></li>
+                        <li class="breadcrumb-item"><a asp-area="Admin" asp-page="./Index">Questions</a></li>
+                        <li class="breadcrumb-item"><a asp-area="Admin" asp-page="./Details" asp-route-id="@Model.Question.Id">Details</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Edit</li>
+                    </ol>
+                </nav>
+            </div>
+
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    @TempData["ErrorMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            }
+
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">
+                                <i class="fas fa-edit me-2"></i>Edit Question Information
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <form method="post">
+                                <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <div class="mb-3">
+                                            <label asp-for="Input.QuizId" class="form-label"></label>
+                                            <select asp-for="Input.QuizId" asp-items="Model.QuizOptions" class="form-select" id="quizSelect">
+                                                <option value="">-- Select Quiz --</option>
+                                            </select>
+                                            <span asp-validation-for="Input.QuizId" class="text-danger"></span>
+                                            <div class="form-text" id="quizHelp"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="mb-3">
+                                            <label asp-for="Input.Order" class="form-label"></label>
+                                            <input asp-for="Input.Order" class="form-control" type="number" min="1" max="999" id="orderInput" />
+                                            <span asp-validation-for="Input.Order" class="text-danger"></span>
+                                            <div class="form-text" id="orderHelp"></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label asp-for="Input.Text" class="form-label"></label>
+                                    <textarea asp-for="Input.Text" class="form-control" rows="3" 
+                                              placeholder="Enter the question text..."></textarea>
+                                    <span asp-validation-for="Input.Text" class="text-danger"></span>
+                                </div>
+
+                                <div class="mb-4">
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <label class="form-label mb-0">Answer Options</label>
+                                        <div>
+                                            <button type="button" class="btn btn-outline-success btn-sm" onclick="addOption()">
+                                                <i class="fas fa-plus me-1"></i>Add Option
+                                            </button>
+                                            <button type="button" class="btn btn-outline-danger btn-sm" onclick="removeOption()">
+                                                <i class="fas fa-minus me-1"></i>Remove Option
+                                            </button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div id="optionsContainer">
+                                        @for (int i = 0; i < Model.Input.Options.Count; i++)
+                                        {
+                                            <div class="option-row mb-2" data-index="@i">
+                                                <div class="input-group">
+                                                    <div class="input-group-text">
+                                                        <input asp-for="Input.Options[i].IsCorrect" class="form-check-input mt-0" type="checkbox" />
+                                                        <input type="hidden" asp-for="Input.Options[i].Order" value="@(i + 1)" />
+                                                    </div>
+                                                    <input asp-for="Input.Options[i].Text" class="form-control" placeholder="Enter answer option..." />
+                                                </div>
+                                                <span asp-validation-for="Input.Options[i].Text" class="text-danger"></span>
+                                            </div>
+                                        }
+                                    </div>
+                                    <span asp-validation-for="Input.Options" class="text-danger"></span>
+                                    <div class="form-text">
+                                        <i class="fas fa-info-circle me-1"></i>
+                                        Check the box next to correct answer(s). At least one option must be marked as correct.
+                                    </div>
+                                </div>
+
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <button type="submit" class="btn btn-warning">
+                                            <i class="fas fa-save me-1"></i>Update Question
+                                        </button>
+                                        <a asp-area="Admin" asp-page="./Details" asp-route-id="@Model.Question.Id" class="btn btn-outline-secondary">
+                                            <i class="fas fa-times me-1"></i>Cancel
+                                        </a>
+                                    </div>
+                                    <div>
+                                        <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                                            <i class="fas fa-trash me-1"></i>Delete Question
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">
+                                <i class="fas fa-info-circle me-2"></i>Current Context
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>Original Quiz:</strong><br>
+                                <small class="text-muted">
+                                    @Model.Question.Quiz.Lesson.Module.Title > 
+                                    @Model.Question.Quiz.Lesson.Title > 
+                                    @Model.Question.Quiz.Title
+                                </small>
+                            </p>
+                            <p><strong>Current Order:</strong> @Model.Question.Order</p>
+                            <p><strong>Created:</strong> @Model.Question.DateCreated.ToString("g")</p>
+                            <p><strong>Answer Options:</strong> @Model.Question.Options.Count</p>
+                            <p><strong>Correct Answers:</strong> @Model.Question.Options.Count(o => o.IsCorrect)</p>
+                        </div>
+                    </div>
+
+                    <div class="card mt-3">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">
+                                <i class="fas fa-info-circle me-2"></i>Question Guidelines
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <small class="text-muted">
+                                <strong>Question Text:</strong><br>
+                                Write clear, concise questions that test specific knowledge or skills.<br><br>
+                                
+                                <strong>Answer Options:</strong><br>
+                                • Provide 2-10 answer options<br>
+                                • Mark correct answer(s) with checkboxes<br>
+                                • Make distractors plausible but clearly incorrect<br>
+                                • Keep options roughly the same length<br><br>
+                                
+                                <strong>Question Order:</strong><br>
+                                Questions are displayed in order within the quiz. Use logical sequencing.<br><br>
+                                
+                                <strong>Best Practices:</strong><br>
+                                • Test one concept per question<br>
+                                • Avoid negative phrasing when possible<br>
+                                • Use simple, clear language<br>
+                                • Ensure only one clearly correct answer
+                            </small>
+                        </div>
+                    </div>
+
+                    <div class="card mt-3" id="quizInfoCard" style="display: none;">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">
+                                <i class="fas fa-quiz me-2"></i>Selected Quiz
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>Module:</strong> <span id="moduleTitle">-</span></p>
+                            <p><strong>Lesson:</strong> <span id="lessonTitle">-</span></p>
+                            <p><strong>Quiz:</strong> <span id="quizTitle">-</span></p>
+                            <p><strong>Existing Questions:</strong> <span id="questionCount">0</span></p>
+                            <p class="mb-0"><small class="text-muted">This question will be moved to the selected quiz.</small></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Confirm Delete</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this question?</p>
+                <p><strong>Question:</strong> @Model.Question.Text</p>
+                <div class="alert alert-warning" role="alert">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    <strong>Warning:</strong> This action cannot be undone. All associated answer options and student responses will also be deleted.
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <form method="post" asp-area="Admin" asp-page="./Delete" class="d-inline">
+                    <input type="hidden" name="id" value="@Model.Question.Id" />
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-trash me-1"></i>Delete Question
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    
+    <script>
+        $(document).ready(function() {
+            // Handle quiz selection change
+            $('#quizSelect').change(function() {
+                var quizId = $(this).val();
+                if (quizId && quizId != @Model.Input.QuizId) {
+                    $.get('@Url.Page("/Questions/Edit", "QuizInfo")', { quizId: quizId })
+                        .done(function(data) {
+                            $('#moduleTitle').text(data.moduleTitle);
+                            $('#lessonTitle').text(data.lessonTitle);
+                            $('#quizTitle').text(data.quizTitle);
+                            $('#questionCount').text(data.questionCount);
+                            $('#orderInput').val(data.suggestedOrder);
+                            $('#orderHelp').text('Suggested order: ' + data.suggestedOrder);
+                            $('#quizInfoCard').show();
+                            
+                            if (!data.isActive) {
+                                $('#quizHelp').html('<span class="text-warning">⚠️ This quiz is inactive</span>');
+                            } else {
+                                $('#quizHelp').text('');
+                            }
+                        })
+                        .fail(function() {
+                            $('#quizInfoCard').hide();
+                            $('#quizHelp').text('');
+                        });
+                } else {
+                    $('#quizInfoCard').hide();
+                    $('#quizHelp').text('');
+                    $('#orderHelp').text('');
+                }
+            });
+
+            // Auto-resize textarea
+            $('textarea').on('input', function() {
+                this.style.height = 'auto';
+                this.style.height = (this.scrollHeight) + 'px';
+            });
+        });
+
+        function addOption() {
+            var container = $('#optionsContainer');
+            var currentCount = container.find('.option-row').length;
+            
+            if (currentCount >= 10) {
+                alert('Maximum 10 options allowed');
+                return;
+            }
+
+            var newIndex = currentCount;
+            var optionHtml = `
+                <div class="option-row mb-2" data-index="${newIndex}">
+                    <div class="input-group">
+                        <div class="input-group-text">
+                            <input name="Input.Options[${newIndex}].IsCorrect" class="form-check-input mt-0" type="checkbox" value="true" />
+                            <input name="Input.Options[${newIndex}].IsCorrect" type="hidden" value="false" />
+                            <input name="Input.Options[${newIndex}].Order" type="hidden" value="${newIndex + 1}" />
+                        </div>
+                        <input name="Input.Options[${newIndex}].Text" class="form-control" placeholder="Enter answer option..." />
+                    </div>
+                </div>`;
+            
+            container.append(optionHtml);
+        }
+
+        function removeOption() {
+            var container = $('#optionsContainer');
+            var options = container.find('.option-row');
+            
+            if (options.length <= 2) {
+                alert('Minimum 2 options required');
+                return;
+            }
+
+            options.last().remove();
+            
+            // Reindex remaining options
+            container.find('.option-row').each(function(index) {
+                $(this).attr('data-index', index);
+                $(this).find('input[name*="IsCorrect"]').attr('name', `Input.Options[${index}].IsCorrect`);
+                $(this).find('input[name*="Order"]').attr('name', `Input.Options[${index}].Order`).val(index + 1);
+                $(this).find('input[name*="Text"]').attr('name', `Input.Options[${index}].Text`);
+            });
+        }
+    </script>
+}

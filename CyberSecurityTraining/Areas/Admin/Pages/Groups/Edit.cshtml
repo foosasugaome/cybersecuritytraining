@@ -1,0 +1,125 @@
+@page
+@model CyberSecurityTraining.Areas.Admin.Pages.Groups.EditModel
+@{
+    ViewData["Title"] = "Edit Group";
+}
+
+<div class="container-fluid">
+    <!-- Breadcrumb Navigation -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a asp-area="Admin" asp-page="/Dashboard">
+                    <i class="fas fa-home"></i> Dashboard
+                </a>
+            </li>
+            <li class="breadcrumb-item">
+                <a asp-area="Admin" asp-page="/Groups/Index">
+                    <i class="fas fa-users"></i> Groups
+                </a>
+            </li>
+            <li class="breadcrumb-item">
+                <a asp-area="Admin" asp-page="/Groups/Details" asp-route-id="@Model.UserGroup.Id">
+                    @Model.UserGroup.Name
+                </a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">
+                <i class="fas fa-edit"></i> Edit
+            </li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title mb-0">
+                        <i class="fas fa-edit me-2"></i>
+                        Edit Group: @Model.UserGroup.Name
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                        
+                        <div class="mb-3">
+                            <label asp-for="Input.Name" class="form-label"></label>
+                            <input asp-for="Input.Name" class="form-control" placeholder="Enter group name" />
+                            <span asp-validation-for="Input.Name" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Input.CompanyId" class="form-label"></label>
+                            <select asp-for="Input.CompanyId" class="form-select">
+                                <option value="">Select Company</option>
+                                @foreach (var company in Model.Companies)
+                                {
+                                    <option value="@company.Id" selected="@(company.Id == Model.Input.CompanyId)">
+                                        @company.Name
+                                    </option>
+                                }
+                            </select>
+                            <span asp-validation-for="Input.CompanyId" class="text-danger"></span>
+                            @if (!Model.Companies.Any())
+                            {
+                                <div class="form-text text-warning">
+                                    No companies available. <a asp-area="Admin" asp-page="/Companies/Create">Create a company first</a>.
+                                </div>
+                            }
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Input.Description" class="form-label"></label>
+                            <textarea asp-for="Input.Description" class="form-control" rows="3" 
+                                      placeholder="Enter group description (optional)"></textarea>
+                            <span asp-validation-for="Input.Description" class="text-danger"></span>
+                        </div>
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a asp-area="Admin" asp-page="/Groups/Details" asp-route-id="@Model.UserGroup.Id" 
+                               class="btn btn-outline-secondary me-md-2">
+                                <i class="fas fa-arrow-left"></i> Cancel
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Save Changes
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-info-circle"></i> Current Information
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <dl class="row">
+                        <dt class="col-sm-5">Original Company:</dt>
+                        <dd class="col-sm-7">@Model.UserGroup.Company?.Name</dd>
+                        
+                        <dt class="col-sm-5">Created:</dt>
+                        <dd class="col-sm-7">@Model.UserGroup.DateCreated.ToString("MMM dd, yyyy")</dd>
+                    </dl>
+                    
+                    <hr />
+                    
+                    <h6>Edit Notes:</h6>
+                    <ul class="mb-0 small">
+                        <li>Group names must be unique within each company</li>
+                        <li>Changing company will move all users to the new company's group</li>
+                        <li>All current user memberships will be preserved</li>
+                        <li>Training assignments may be affected by company changes</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

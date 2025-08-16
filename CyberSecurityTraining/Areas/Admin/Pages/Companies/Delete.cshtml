@@ -1,0 +1,131 @@
+@page
+@model CyberSecurityTraining.Areas.Admin.Pages.Companies.DeleteModel
+@{
+    ViewData["Title"] = "Delete Company";
+}
+
+<div class="container-fluid">
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Delete Company</h1>
+        <div>
+            <a asp-area="Admin" asp-page="./Details" asp-route-id="@Model.Company.Id" class="btn btn-info">
+                <i class="fas fa-eye"></i> View Details
+            </a>
+            <a asp-area="Admin" asp-page="./Index" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Back to List
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card shadow border-left-danger">
+                <div class="card-header py-3 bg-danger text-white">
+                    <h6 class="m-0 font-weight-bold">
+                        <i class="fas fa-exclamation-triangle"></i> Confirm Deletion
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-danger" role="alert">
+                        <h5><i class="fas fa-exclamation-triangle"></i> Warning!</h5>
+                        <p>You are about to permanently delete the following company:</p>
+                        <strong>"@Model.Company.Name"</strong>
+                        <p class="mt-2 mb-0">This action cannot be undone.</p>
+                    </div>
+
+                    <dl class="row">
+                        <dt class="col-sm-3">Company Name:</dt>
+                        <dd class="col-sm-9">@Model.Company.Name</dd>
+
+                        <dt class="col-sm-3">Description:</dt>
+                        <dd class="col-sm-9">@(Model.Company.Description ?? "No description provided")</dd>
+
+                        <dt class="col-sm-3">Created:</dt>
+                        <dd class="col-sm-9">@Model.Company.DateCreated.ToString("MMMM dd, yyyy 'at' h:mm tt")</dd>
+
+                        <dt class="col-sm-3">Associated Users:</dt>
+                        <dd class="col-sm-9">@Model.UserCount</dd>
+
+                        <dt class="col-sm-3">Associated Groups:</dt>
+                        <dd class="col-sm-9">@Model.GroupCount</dd>
+                    </dl>
+
+                    @if (!Model.CanDelete)
+                    {
+                        <div class="alert alert-warning" role="alert">
+                            <h6><i class="fas fa-ban"></i> Cannot Delete Company</h6>
+                            <ul class="mb-0">
+                                @foreach (var warning in Model.DeletionWarnings)
+                                {
+                                    <li>@warning</li>
+                                }
+                            </ul>
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            <a asp-area="Admin" asp-page="./Details" asp-route-id="@Model.Company.Id" class="btn btn-info">
+                                <i class="fas fa-eye"></i> View Details
+                            </a>
+                            <a asp-area="Admin" asp-page="./Index" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left"></i> Back to List
+                            </a>
+                        </div>
+                    }
+                    else
+                    {
+                        <form method="post" class="d-inline">
+                            <input type="hidden" asp-for="Company.Id" />
+                            <div class="d-flex gap-2">
+                                <button type="submit" class="btn btn-danger" onclick="return confirm('Are you absolutely sure you want to delete this company? This action cannot be undone.')">
+                                    <i class="fas fa-trash"></i> Delete Company
+                                </button>
+                                <a asp-area="Admin" asp-page="./Details" asp-route-id="@Model.Company.Id" class="btn btn-secondary">
+                                    <i class="fas fa-times"></i> Cancel
+                                </a>
+                            </div>
+                        </form>
+                    }
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card border-left-danger shadow">
+                <div class="card-body">
+                    <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">Deletion Impact</div>
+                    <div class="text-gray-600">
+                        <p><strong>What gets deleted:</strong></p>
+                        <ul>
+                            <li>Company record</li>
+                            <li>Company settings and configuration</li>
+                        </ul>
+                        
+                        <p><strong>What must be handled first:</strong></p>
+                        <ul>
+                            <li>All associated users must be removed or reassigned</li>
+                            <li>All user groups must be deleted or reassigned</li>
+                            <li>Any training assignments linked to this company</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            @if (!Model.CanDelete)
+            {
+                <div class="card border-left-warning shadow mt-3">
+                    <div class="card-body">
+                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Quick Actions</div>
+                        <div class="d-grid gap-2">
+                            <a asp-area="Admin" asp-page="/Users/Index" asp-route-companyId="@Model.Company.Id" class="btn btn-outline-primary btn-sm">
+                                <i class="fas fa-users"></i> Manage Users
+                            </a>
+                            <a asp-area="Admin" asp-page="/Groups/Index" asp-route-companyId="@Model.Company.Id" class="btn btn-outline-success btn-sm">
+                                <i class="fas fa-layer-group"></i> Manage Groups
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>

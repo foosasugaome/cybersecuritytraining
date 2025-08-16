@@ -1,0 +1,270 @@
+@page
+@model CyberSecurityTraining.Areas.Admin.Pages.Groups.ModuleAssignmentsModel
+@{
+    ViewData["Title"] = "Module Assignments";
+}
+
+<div class="container-fluid">
+    <!-- Breadcrumb Navigation -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a asp-area="Admin" asp-page="/Dashboard">
+                    <i class="fas fa-home"></i> Dashboard
+                </a>
+            </li>
+            <li class="breadcrumb-item">
+                <a asp-area="Admin" asp-page="/Groups/Index">
+                    <i class="fas fa-users"></i> Groups
+                </a>
+            </li>
+            <li class="breadcrumb-item">
+                <a asp-area="Admin" asp-page="/Groups/Details" asp-route-id="@Model.UserGroup.Id">
+                    @Model.UserGroup.Name
+                </a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">
+                <i class="fas fa-book"></i> Module Assignments
+            </li>
+        </ol>
+    </nav>
+
+    <!-- Success/Error Messages -->
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle"></i> @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="fas fa-exclamation-circle"></i> @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <!-- Group Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title mb-0">
+                        <i class="fas fa-book me-2"></i>
+                        Module Assignments for: @Model.UserGroup.Name
+                    </h4>
+                    <p class="mb-0 text-muted">
+                        <i class="fas fa-building me-1"></i> @Model.UserGroup.Company?.Name
+                        <span class="ms-3">
+                            <i class="fas fa-users me-1"></i> @Model.UserGroup.UserMemberships.Count active members
+                        </span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Assigned Modules -->
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-list-check me-2"></i>
+                        Assigned Modules (@Model.AssignedModules.Count)
+                    </h5>
+                </div>
+                <div class="card-body">
+                    @if (Model.AssignedModules.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Module</th>
+                                        <th>Assigned</th>
+                                        <th>Due Date</th>
+                                        <th class="text-center">Progress</th>
+                                        <th class="text-center">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.AssignedModules)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <div>
+                                                    <div class="fw-medium">@item.Assignment.Module.Title</div>
+                                                    @if (!string.IsNullOrEmpty(item.Assignment.Module.Description))
+                                                    {
+                                                        <small class="text-muted">@item.Assignment.Module.Description</small>
+                                                    }
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <small class="text-muted">
+                                                    @item.Assignment.AssignedAt.ToString("MMM dd, yyyy")
+                                                    <br>by @item.Assignment.AssignedBy
+                                                </small>
+                                            </td>
+                                            <td>
+                                                @if (item.Assignment.DueDate.HasValue)
+                                                {
+                                                    <span class="badge bg-@(item.Assignment.DueDate.Value < DateTime.Now ? "danger" : "warning")">
+                                                        @item.Assignment.DueDate.Value.ToString("MMM dd, yyyy")
+                                                    </span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="text-muted">No due date</span>
+                                                }
+                                            </td>
+                                            <td class="text-center">
+                                                <div class="d-flex flex-column align-items-center">
+                                                    <div class="progress mb-1" style="width: 80px; height: 8px;">
+                                                        <div class="progress-bar bg-@(item.CompletionPercentage >= 80 ? "success" : item.CompletionPercentage >= 50 ? "warning" : "danger")" 
+                                                             role="progressbar" 
+                                                             style="width: @item.CompletionPercentage%"
+                                                             aria-valuenow="@item.CompletionPercentage" 
+                                                             aria-valuemin="0" 
+                                                             aria-valuemax="100">
+                                                        </div>
+                                                    </div>
+                                                    <small class="text-muted">
+                                                        @item.CompletedCount/@item.MemberCount
+                                                        (@item.CompletionPercentage.ToString("F0")%)
+                                                    </small>
+                                                </div>
+                                            </td>
+                                            <td class="text-center">
+                                                <div class="btn-group btn-group-sm" role="group">
+                                                    <a asp-area="Admin" asp-page="/Modules/Details" asp-route-id="@item.Assignment.Module.Id" 
+                                                       class="btn btn-outline-info" title="View Module">
+                                                        <i class="fas fa-eye"></i>
+                                                    </a>
+                                                    <form method="post" asp-page-handler="RemoveAssignment" 
+                                                          asp-route-groupId="@Model.UserGroup.Id" 
+                                                          asp-route-assignmentId="@item.Assignment.Id" 
+                                                          class="d-inline"
+                                                          onsubmit="return confirm('Are you sure you want to remove this module assignment? This will remove it for all group members.');">
+                                                        <button type="submit" class="btn btn-outline-danger" title="Remove Assignment">
+                                                            <i class="fas fa-times"></i>
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center py-4">
+                            <i class="fas fa-book fa-3x text-muted mb-3"></i>
+                            <h5 class="text-muted">No Modules Assigned</h5>
+                            <p class="text-muted">This group doesn't have any training modules assigned yet.</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Assign New Module -->
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-plus-circle me-2"></i>
+                        Assign New Module
+                    </h5>
+                </div>
+                <div class="card-body">
+                    @if (Model.AvailableModules.Any())
+                    {
+                        <form method="post" asp-page-handler="AssignModule" asp-route-id="@Model.UserGroup.Id">
+                            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                            
+                            <div class="mb-3">
+                                <label asp-for="Input.ModuleId" class="form-label"></label>
+                                <select asp-for="Input.ModuleId" class="form-select">
+                                    <option value="">Select a module</option>
+                                    @foreach (var module in Model.AvailableModules)
+                                    {
+                                        <option value="@module.Id">@module.Title</option>
+                                    }
+                                </select>
+                                <span asp-validation-for="Input.ModuleId" class="text-danger"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <label asp-for="Input.DueDate" class="form-label"></label>
+                                <input asp-for="Input.DueDate" class="form-control" type="date" />
+                                <span asp-validation-for="Input.DueDate" class="text-danger"></span>
+                                <div class="form-text">Optional: Set a completion deadline</div>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary w-100">
+                                <i class="fas fa-plus"></i> Assign Module
+                            </button>
+                        </form>
+                    }
+                    else
+                    {
+                        <div class="text-center">
+                            <i class="fas fa-check-circle fa-2x text-success mb-2"></i>
+                            <p class="text-muted mb-0">All available modules have been assigned to this group.</p>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <!-- Assignment Information -->
+            <div class="card mt-3">
+                <div class="card-header">
+                    <h6 class="card-title mb-0">
+                        <i class="fas fa-info-circle"></i> Assignment Info
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <h6>How Module Assignments Work:</h6>
+                    <ul class="mb-0 small">
+                        <li>All current and future group members automatically get access</li>
+                        <li>Progress is tracked individually for each member</li>
+                        <li>Due dates are optional but help track completion</li>
+                        <li>Removing assignments doesn't delete individual progress</li>
+                        <li>Members can see their assigned modules in their dashboard</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between">
+                <a asp-area="Admin" asp-page="/Groups/Details" asp-route-id="@Model.UserGroup.Id" 
+                   class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left"></i> Back to Group Details
+                </a>
+                <div>
+                    <a asp-area="Admin" asp-page="/Groups/Edit" asp-route-id="@Model.UserGroup.Id" 
+                       class="btn btn-outline-primary me-2">
+                        <i class="fas fa-edit"></i> Edit Group
+                    </a>
+                    <a asp-area="Admin" asp-page="/Modules/Index" class="btn btn-primary">
+                        <i class="fas fa-book"></i> Manage Modules
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

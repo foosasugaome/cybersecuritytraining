@@ -1,0 +1,255 @@
+@page
+@model CyberSecurityTraining.Pages.Training.TakeModuleModel
+@using CyberSecurityTraining.Models
+@{
+    ViewData["Title"] = "Training: " + Model.Module.Title;
+}
+
+<div class="container-fluid">
+    <!-- Module Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card bg-primary text-white">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <div>
+                        <h3 class="mb-1">@Model.Module.Title</h3>
+                        <p class="mb-0">@Model.Module.Description</p>
+                    </div>
+                    <div class="text-end">
+                        <div class="h4 mb-1">@Model.CompletionPercentage.ToString("F0")%</div>
+                        <small>Complete</small>
+                    </div>
+                </div>
+                <div class="card-body p-2">
+                    <div class="progress" style="height: 8px;">
+                        <div class="progress-bar bg-success" 
+                             role="progressbar" 
+                             style="width: @Model.CompletionPercentage%"
+                             aria-valuenow="@Model.CompletionPercentage" 
+                             aria-valuemin="0" 
+                             aria-valuemax="100">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle"></i> @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <div class="row">
+        <!-- Lesson Navigation Sidebar -->
+        <div class="col-lg-3">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-list"></i> Lessons
+                    </h5>
+                </div>
+                <div class="card-body p-0">
+                    <div class="list-group list-group-flush">
+                        @for (int i = 0; i < Model.Lessons.Count; i++)
+                        {
+                            var lesson = Model.Lessons[i];
+                            var isActive = i == Model.CurrentLessonIndex;
+                            var statusIcon = lesson.Progress?.Status switch
+                            {
+                                ProgressStatus.Completed => "fas fa-check-circle text-success",
+                                ProgressStatus.InProgress => "fas fa-play-circle text-warning",
+                                _ => "fas fa-circle text-muted"
+                            };
+
+                            <a href="@Url.Page("/Training/TakeModule", new { id = Model.Module.Id, lessonIndex = i })"
+                               class="list-group-item list-group-item-action @(isActive ? "active" : "") @(!lesson.IsUnlocked ? "disabled" : "")">
+                                <div class="d-flex align-items-center">
+                                    <i class="@statusIcon me-2"></i>
+                                    <div class="flex-grow-1">
+                                        <div class="fw-medium">@lesson.Lesson.Title</div>
+                                        @if (lesson.Quizzes.Any())
+                                        {
+                                            <small class="text-muted">
+                                                <i class="fas fa-question-circle"></i> @lesson.Quizzes.Count quiz(s)
+                                            </small>
+                                        }
+                                    </div>
+                                    @if (!lesson.IsUnlocked)
+                                    {
+                                        <i class="fas fa-lock text-muted"></i>
+                                    }
+                                </div>
+                            </a>
+                        }
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <a asp-page="/Training/Dashboard" class="btn btn-outline-secondary btn-sm w-100">
+                        <i class="fas fa-arrow-left"></i> Back to Dashboard
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="col-lg-9">
+            @if (Model.Lessons.Any() && Model.CurrentLessonIndex < Model.Lessons.Count)
+            {
+                var currentLesson = Model.Lessons[Model.CurrentLessonIndex];
+                
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h4 class="mb-0">@currentLesson.Lesson.Title</h4>
+                        <div class="btn-group" role="group">
+                            @if (Model.CurrentLessonIndex > 0)
+                            {
+                                <a href="@Url.Page("/Training/TakeModule", new { id = Model.Module.Id, lessonIndex = Model.CurrentLessonIndex - 1 })"
+                                   class="btn btn-outline-secondary btn-sm">
+                                    <i class="fas fa-chevron-left"></i> Previous
+                                </a>
+                            }
+                            @if (Model.CurrentLessonIndex < Model.Lessons.Count - 1 && Model.Lessons[Model.CurrentLessonIndex + 1].IsUnlocked)
+                            {
+                                <a href="@Url.Page("/Training/TakeModule", new { id = Model.Module.Id, lessonIndex = Model.CurrentLessonIndex + 1 })"
+                                   class="btn btn-outline-secondary btn-sm">
+                                    Next <i class="fas fa-chevron-right"></i>
+                                </a>
+                            }
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <!-- Lesson Content -->
+                        <div class="lesson-content mb-4">
+                            @* Render lesson content as HTML (assuming it's stored as HTML or markdown converted to HTML) *@
+                            @Html.Raw(currentLesson.Lesson.Content)
+                        </div>
+
+                        <!-- Lesson Completion -->
+                        @if (currentLesson.Progress?.Status != ProgressStatus.Completed)
+                        {
+                            <div class="alert alert-info">
+                                <h6><i class="fas fa-info-circle"></i> Ready to continue?</h6>
+                                <p class="mb-2">Mark this lesson as complete to unlock the next one and track your progress.</p>
+                                <form method="post" asp-page-handler="MarkLessonComplete" 
+                                      asp-route-moduleId="@Model.Module.Id" 
+                                      asp-route-lessonId="@currentLesson.Lesson.Id">
+                                    <button type="submit" class="btn btn-success">
+                                        <i class="fas fa-check"></i> Mark as Complete
+                                    </button>
+                                </form>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="alert alert-success">
+                                <h6><i class="fas fa-check-circle"></i> Lesson Complete!</h6>
+                                <p class="mb-0">You completed this lesson on @currentLesson.Progress.CompletedAt?.ToString("MMMM dd, yyyy 'at' h:mm tt")</p>
+                            </div>
+                        }
+
+                        <!-- Quizzes Section -->
+                        @if (currentLesson.Quizzes.Any())
+                        {
+                            <div class="mt-4">
+                                <h5><i class="fas fa-question-circle"></i> Knowledge Check</h5>
+                                <p class="text-muted">Test your understanding with these quizzes:</p>
+                                
+                                <div class="row">
+                                    @foreach (var quiz in currentLesson.Quizzes)
+                                    {
+                                        <div class="col-md-6 mb-3">
+                                            <div class="card border-primary">
+                                                <div class="card-body">
+                                                    <h6 class="card-title">@quiz.Title</h6>
+                                                    @if (!string.IsNullOrEmpty(quiz.Description))
+                                                    {
+                                                        <p class="card-text small text-muted">@quiz.Description</p>
+                                                    }
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <small class="text-muted">
+                                                            Passing Score: @quiz.PassingScore%
+                                                        </small>
+                                                        <a asp-page="/Training/TakeQuiz" asp-route-id="@quiz.Id" 
+                                                           class="btn btn-primary btn-sm">
+                                                            <i class="fas fa-play"></i> Take Quiz
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="card">
+                    <div class="card-body text-center py-5">
+                        <i class="fas fa-book fa-3x text-muted mb-3"></i>
+                        <h4>No Lessons Available</h4>
+                        <p class="text-muted">This module doesn't have any lessons yet.</p>
+                        <a asp-page="/Training/Dashboard" class="btn btn-primary">
+                            <i class="fas fa-arrow-left"></i> Back to Dashboard
+                        </a>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<style>
+.lesson-content {
+    line-height: 1.8;
+    font-size: 1.1rem;
+}
+
+.lesson-content h1, .lesson-content h2, .lesson-content h3 {
+    color: #2c3e50;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+}
+
+.lesson-content p {
+    margin-bottom: 1.2rem;
+}
+
+.lesson-content ul, .lesson-content ol {
+    margin-bottom: 1.2rem;
+    padding-left: 2rem;
+}
+
+.lesson-content li {
+    margin-bottom: 0.5rem;
+}
+
+.lesson-content blockquote {
+    border-left: 4px solid #007bff;
+    padding-left: 1rem;
+    margin: 1.5rem 0;
+    background-color: #f8f9fa;
+    padding: 1rem;
+    border-radius: 0.375rem;
+}
+
+.lesson-content code {
+    background-color: #f8f9fa;
+    padding: 0.2rem 0.4rem;
+    border-radius: 0.25rem;
+    font-family: 'Monaco', 'Menlo', monospace;
+}
+
+.lesson-content pre {
+    background-color: #f8f9fa;
+    padding: 1rem;
+    border-radius: 0.375rem;
+    overflow-x: auto;
+}
+</style>

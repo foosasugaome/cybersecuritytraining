@@ -1,0 +1,165 @@
+@page
+@model CyberSecurityTraining.Areas.Admin.Pages.Modules.DeleteModel
+@{
+    ViewData["Title"] = "Delete Module";
+}
+
+<div class="container-fluid">
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Delete Training Module</h1>
+        <div>
+            <a asp-area="Admin" asp-page="./Details" asp-route-id="@Model.Module.Id" class="btn btn-info">
+                <i class="fas fa-eye"></i> View Details
+            </a>
+            <a asp-area="Admin" asp-page="./Index" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Back to List
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card shadow border-left-danger">
+                <div class="card-header py-3 bg-danger text-white">
+                    <h6 class="m-0 font-weight-bold">
+                        <i class="fas fa-exclamation-triangle"></i> Confirm Deletion
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-danger" role="alert">
+                        <h5><i class="fas fa-exclamation-triangle"></i> Critical Warning!</h5>
+                        <p>You are about to permanently delete the following training module:</p>
+                        <strong>"@Model.Module.Title"</strong>
+                        <p class="mt-2 mb-0">This action will delete ALL associated content and CANNOT be undone.</p>
+                    </div>
+
+                    <dl class="row">
+                        <dt class="col-sm-3">Module Title:</dt>
+                        <dd class="col-sm-9">@Model.Module.Title</dd>
+
+                        <dt class="col-sm-3">Description:</dt>
+                        <dd class="col-sm-9">@(Model.Module.Description ?? "No description provided")</dd>
+
+                        <dt class="col-sm-3">Display Order:</dt>
+                        <dd class="col-sm-9">@Model.Module.Order</dd>
+
+                        <dt class="col-sm-3">Status:</dt>
+                        <dd class="col-sm-9">
+                            @if (Model.Module.IsActive)
+                            {
+                                <span class="badge bg-success">Active</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-secondary">Inactive</span>
+                            }
+                        </dd>
+
+                        <dt class="col-sm-3">Created:</dt>
+                        <dd class="col-sm-9">@Model.Module.DateCreated.ToString("MMMM dd, yyyy 'at' h:mm tt")</dd>
+
+                        <dt class="col-sm-3">Lessons:</dt>
+                        <dd class="col-sm-9">@Model.LessonCount</dd>
+
+                        <dt class="col-sm-3">Quizzes:</dt>
+                        <dd class="col-sm-9">@Model.QuizCount</dd>
+
+                        <dt class="col-sm-3">Assigned Users:</dt>
+                        <dd class="col-sm-9">@Model.AssignedUsers</dd>
+
+                        <dt class="col-sm-3">Assigned Groups:</dt>
+                        <dd class="col-sm-9">@Model.AssignedGroups</dd>
+                    </dl>
+
+                    @if (Model.DeletionWarnings.Any())
+                    {
+                        <div class="alert alert-warning" role="alert">
+                            <h6><i class="fas fa-exclamation-triangle"></i> Deletion Impact</h6>
+                            <ul class="mb-0">
+                                @foreach (var warning in Model.DeletionWarnings)
+                                {
+                                    <li>@warning</li>
+                                }
+                            </ul>
+                        </div>
+                    }
+
+                    <form method="post" class="d-inline">
+                        <input type="hidden" asp-for="Module.Id" />
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-danger" 
+                                    onclick="return confirm('⚠️ FINAL WARNING ⚠️\n\nDeleting this module will:\n- Delete ALL @Model.LessonCount lesson(s)\n- Delete ALL @Model.QuizCount quiz(es) and questions\n- Remove assignments for @Model.AssignedUsers user(s)\n- Remove assignments for @Model.AssignedGroups group(s)\n- Permanently destroy all user progress data\n\nTHIS CANNOT BE UNDONE!\n\nType DELETE to confirm you want to proceed:') && prompt('Type DELETE to confirm:') === 'DELETE'">
+                                <i class="fas fa-trash"></i> Delete Module & All Content
+                            </button>
+                            <a asp-area="Admin" asp-page="./Details" asp-route-id="@Model.Module.Id" class="btn btn-secondary">
+                                <i class="fas fa-times"></i> Cancel
+                            </a>
+                            <a asp-area="Admin" asp-page="./Edit" asp-route-id="@Model.Module.Id" class="btn btn-warning">
+                                <i class="fas fa-pause"></i> Deactivate Instead
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card border-left-danger shadow">
+                <div class="card-body">
+                    <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">What Gets Deleted</div>
+                    <div class="text-gray-600">
+                        <p><strong>Module Content:</strong></p>
+                        <ul>
+                            <li>@Model.LessonCount Lesson(s)</li>
+                            <li>@Model.QuizCount Quiz(es) and all questions</li>
+                            <li>All quiz questions and answer options</li>
+                        </ul>
+                        
+                        <p><strong>User Data:</strong></p>
+                        <ul>
+                            <li>All user progress for this module</li>
+                            <li>All lesson completion records</li>
+                            <li>All quiz results and answers</li>
+                            <li>All certificates issued for this module</li>
+                        </ul>
+
+                        <p><strong>Assignments:</strong></p>
+                        <ul>
+                            <li>@Model.AssignedUsers User assignment(s)</li>
+                            <li>@Model.AssignedGroups Group assignment(s)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card border-left-warning shadow mt-3">
+                <div class="card-body">
+                    <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Consider Alternatives</div>
+                    <div class="text-gray-600">
+                        <p><strong>Instead of deleting, you could:</strong></p>
+                        <ul>
+                            <li><strong>Deactivate:</strong> Hide from users but preserve data</li>
+                            <li><strong>Archive:</strong> Move to inactive status</li>
+                            <li><strong>Reassign:</strong> Move lessons to another module</li>
+                        </ul>
+                        <div class="d-grid gap-2 mt-3">
+                            <a asp-area="Admin" asp-page="./Edit" asp-route-id="@Model.Module.Id" class="btn btn-outline-warning btn-sm">
+                                <i class="fas fa-pause"></i> Deactivate Module
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Enhanced confirmation for deletion
+        function confirmDeletion() {
+            const confirmText = prompt('⚠️ CRITICAL: Type "DELETE" to confirm permanent deletion:');
+            return confirmText === 'DELETE';
+        }
+    </script>
+}

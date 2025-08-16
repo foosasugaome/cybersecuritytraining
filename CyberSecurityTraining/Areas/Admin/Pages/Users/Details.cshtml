@@ -1,0 +1,249 @@
+@page
+@model CyberSecurityTraining.Areas.Admin.Pages.Users.DetailsModel
+@{
+    ViewData["Title"] = "User Details";
+}
+
+<div class="container-fluid">
+    <!-- Breadcrumb Navigation -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a asp-area="Admin" asp-page="/Dashboard">
+                    <i class="fas fa-home"></i> Dashboard
+                </a>
+            </li>
+            <li class="breadcrumb-item">
+                <a asp-area="Admin" asp-page="/Users/Index">
+                    <i class="fas fa-users"></i> Users
+                </a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">
+                <i class="fas fa-user"></i> User Details
+            </li>
+        </ol>
+    </nav>
+
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">
+            <i class="fas fa-user me-2"></i>
+            @Model.User.FirstName @Model.User.LastName
+        </h1>
+        <div>
+            <a asp-area="Admin" asp-page="/Users/Edit" asp-route-id="@Model.User.Id" class="btn btn-primary">
+                <i class="fas fa-edit"></i> Edit User
+            </a>
+            <a asp-area="Admin" asp-page="/Users/Delete" asp-route-id="@Model.User.Id" class="btn btn-outline-danger">
+                <i class="fas fa-trash"></i> Delete
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8">
+            <!-- Basic Information -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-id-card me-2"></i>
+                        Basic Information
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>First Name:</strong> @Model.User.FirstName</p>
+                            <p><strong>Last Name:</strong> @Model.User.LastName</p>
+                            <p><strong>Email:</strong> @Model.User.Email</p>
+                            <p><strong>Username:</strong> @Model.User.UserName</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Company:</strong> @(Model.User.Company?.Name ?? "No Company")</p>
+                            <p><strong>Email Confirmed:</strong> 
+                                @if (Model.User.EmailConfirmed)
+                                {
+                                    <span class="badge bg-success">Yes</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-warning">No</span>
+                                }
+                            </p>
+                            <p><strong>Account Status:</strong>
+                                @if (Model.User.LockoutEnd.HasValue && Model.User.LockoutEnd > DateTimeOffset.UtcNow)
+                                {
+                                    <span class="badge bg-danger">Locked</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-success">Active</span>
+                                }
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Group Memberships -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-users me-2"></i>
+                        Group Memberships
+                    </h5>
+                </div>
+                <div class="card-body">
+                    @if (Model.GroupMemberships.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Group Name</th>
+                                        <th>Company</th>
+                                        <th>Date Joined</th>
+                                        <th>Status</th>
+                                        <th>Added By</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var membership in Model.GroupMemberships)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <a asp-area="Admin" asp-page="/Groups/Details" asp-route-id="@membership.UserGroup.Id">
+                                                    @membership.UserGroup.Name
+                                                </a>
+                                            </td>
+                                            <td>@membership.UserGroup.Company.Name</td>
+                                            <td>@membership.DateJoined.ToString("MMM dd, yyyy")</td>
+                                            <td>
+                                                @if (membership.IsActive)
+                                                {
+                                                    <span class="badge bg-success">Active</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="badge bg-secondary">Inactive</span>
+                                                }
+                                            </td>
+                                            <td>@(membership.JoinedBy ?? "System")</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center py-4">
+                            <i class="fas fa-users fa-3x text-muted mb-3"></i>
+                            <h5>No Group Memberships</h5>
+                            <p class="text-muted">This user is not a member of any groups.</p>
+                            <a asp-area="Admin" asp-page="/Users/Edit" asp-route-id="@Model.User.Id" class="btn btn-primary">
+                                <i class="fas fa-plus"></i> Add to Groups
+                            </a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <!-- Account Details -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-info-circle me-2"></i>
+                        Account Details
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <p><strong>User ID:</strong><br>
+                    <small class="text-muted">@Model.User.Id</small></p>
+                    
+                    <p><strong>Date Created:</strong><br>
+                    @(Model.User.DateCreated?.ToString("MMMM dd, yyyy") ?? "Unknown")</p>
+                    
+                    <p><strong>Last Login:</strong><br>
+                    @(Model.User.LastLogin?.ToString("MMMM dd, yyyy HH:mm") ?? "Never logged in")</p>
+                    
+                    <p><strong>Profile Status:</strong><br>
+                    @if (Model.User.IsProfileComplete)
+                    {
+                        <span class="badge bg-success">Complete</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-warning">Incomplete</span>
+                    }</p>
+                    
+                    <p><strong>First Login:</strong><br>
+                    @if (Model.User.IsFirstLogin)
+                    {
+                        <span class="badge bg-info">Pending</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-success">Completed</span>
+                    }</p>
+                </div>
+            </div>
+
+            <!-- User Roles -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-shield-alt me-2"></i>
+                        User Roles
+                    </h5>
+                </div>
+                <div class="card-body">
+                    @if (Model.UserRoles.Any())
+                    {
+                        @foreach (var role in Model.UserRoles)
+                        {
+                            <span class="badge bg-primary me-1 mb-1">@role</span>
+                        }
+                    }
+                    else
+                    {
+                        <p class="text-muted mb-0">No roles assigned</p>
+                    }
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-cogs me-2"></i>
+                        Quick Actions
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <a asp-area="Admin" asp-page="/Users/Edit" asp-route-id="@Model.User.Id" class="btn btn-outline-primary btn-sm">
+                            <i class="fas fa-edit"></i> Edit User
+                        </a>
+                        <button class="btn btn-outline-warning btn-sm" onclick="alert('Password reset functionality')">
+                            <i class="fas fa-key"></i> Reset Password
+                        </button>
+                        @if (Model.User.LockoutEnd.HasValue && Model.User.LockoutEnd > DateTimeOffset.UtcNow)
+                        {
+                            <button class="btn btn-outline-success btn-sm" onclick="alert('Unlock account functionality')">
+                                <i class="fas fa-unlock"></i> Unlock Account
+                            </button>
+                        }
+                        else
+                        {
+                            <button class="btn btn-outline-warning btn-sm" onclick="alert('Lock account functionality')">
+                                <i class="fas fa-lock"></i> Lock Account
+                            </button>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

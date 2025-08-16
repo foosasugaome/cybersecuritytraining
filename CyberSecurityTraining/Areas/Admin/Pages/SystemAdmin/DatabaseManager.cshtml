@@ -1,0 +1,241 @@
+@page
+@model DatabaseManagerModel
+@{
+    ViewData["Title"] = "Database Management";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <!-- Breadcrumb Navigation -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a asp-area="Admin" asp-page="/Dashboard">
+                    <i class="fas fa-home"></i> Dashboard
+                </a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">
+                <i class="fas fa-database"></i> Database Management
+            </li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card border-danger">
+                <div class="card-header bg-danger text-white">
+                    <h4 class="card-title mb-0">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        DANGER ZONE - Database Management
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-danger" role="alert">
+                        <h5 class="alert-heading">
+                            <i class="fas fa-skull-crossbones me-2"></i>
+                            ⚠️ CRITICAL WARNING ⚠️
+                        </h5>
+                        <p class="mb-3">
+                            <strong>This action will PERMANENTLY DELETE ALL DATA in the database!</strong>
+                        </p>
+                        <hr>
+                        <p class="mb-2"><strong>What will be deleted:</strong></p>
+                        <ul class="mb-3">
+                            <li>All companies and their data</li>
+                            <li>All user groups and members</li>
+                            <li>All training modules and lessons</li>
+                            <li>All quizzes and questions</li>
+                            <li>All user progress and results</li>
+                            <li>All user accounts (except the admin account)</li>
+                        </ul>
+                        <p class="mb-0">
+                            <strong>This action cannot be undone!</strong> 
+                            The database will be cleared and re-populated with fresh sample data.
+                        </p>
+                    </div>
+
+                    @if (Model.IsSuccess.HasValue)
+                    {
+                        if (Model.IsSuccess.Value)
+                        {
+                            <div class="alert alert-success" role="alert">
+                                <h5 class="alert-heading">
+                                    <i class="fas fa-check-circle me-2"></i>
+                                    Database Reset Successful!
+                                </h5>
+                                <p class="mb-0">
+                                    The database has been successfully cleared and re-seeded with fresh sample data.
+                                    All training content has been restored.
+                                </p>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="alert alert-danger" role="alert">
+                                <h5 class="alert-heading">
+                                    <i class="fas fa-times-circle me-2"></i>
+                                    Database Reset Failed!
+                                </h5>
+                                <p class="mb-0">
+                                    An error occurred while resetting the database: @Model.ErrorMessage
+                                </p>
+                            </div>
+                        }
+                    }
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="card-title mb-0">
+                                        <i class="fas fa-info-circle me-2"></i>
+                                        Database Reset Information
+                                    </h5>
+                                </div>
+                                <div class="card-body">
+                                    <p><strong>Current Database Status:</strong></p>
+                                    <ul>
+                                        <li>Companies: @Model.DatabaseStats.CompanyCount</li>
+                                        <li>User Groups: @Model.DatabaseStats.UserGroupCount</li>
+                                        <li>Users: @Model.DatabaseStats.UserCount</li>
+                                        <li>Modules: @Model.DatabaseStats.ModuleCount</li>
+                                        <li>Lessons: @Model.DatabaseStats.LessonCount</li>
+                                        <li>Quizzes: @Model.DatabaseStats.QuizCount</li>
+                                        <li>Questions: @Model.DatabaseStats.QuestionCount</li>
+                                    </ul>
+                                    
+                                    <p><strong>After Reset, you will have:</strong></p>
+                                    <ul>
+                                        <li>3 Sample companies</li>
+                                        <li>7 User groups across industries</li>
+                                        <li>7 Sample users + admin</li>
+                                        <li>6 Comprehensive training modules</li>
+                                        <li>7+ Detailed lessons</li>
+                                        <li>5+ Interactive quizzes</li>
+                                        <li>Multiple questions with options</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="card border-warning">
+                                <div class="card-header bg-warning">
+                                    <h5 class="card-title mb-0">
+                                        <i class="fas fa-shield-alt me-2"></i>
+                                        Safety Checklist
+                                    </h5>
+                                </div>
+                                <div class="card-body">
+                                    <p><strong>Before proceeding, ensure:</strong></p>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="backup-check" required>
+                                        <label class="form-check-label" for="backup-check">
+                                            I have backed up any important data
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="understand-check" required>
+                                        <label class="form-check-label" for="understand-check">
+                                            I understand this will delete ALL data
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="confirm-check" required>
+                                        <label class="form-check-label" for="confirm-check">
+                                            I confirm this is intentional
+                                        </label>
+                                    </div>
+                                    <div class="form-check mb-3">
+                                        <input class="form-check-input" type="checkbox" id="admin-check" required>
+                                        <label class="form-check-label" for="admin-check">
+                                            I am authorized to perform this action
+                                        </label>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="confirmation-text" class="form-label">
+                                            <strong>Type "RESET DATABASE" to confirm:</strong>
+                                        </label>
+                                        <input type="text" class="form-control" id="confirmation-text" 
+                                               placeholder="Type RESET DATABASE" required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <form method="post" id="reset-form">
+                                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                    <a asp-area="Admin" asp-page="/Dashboard" class="btn btn-outline-secondary me-md-2">
+                                        <i class="fas fa-arrow-left me-1"></i>
+                                        Cancel & Return to Dashboard
+                                    </a>
+                                    <button type="submit" class="btn btn-danger btn-lg" id="reset-button" disabled>
+                                        <i class="fas fa-bomb me-2"></i>
+                                        RESET DATABASE
+                                        <i class="fas fa-exclamation-triangle ms-2"></i>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    const confirmationText = document.getElementById('confirmation-text');
+    const resetButton = document.getElementById('reset-button');
+    const resetForm = document.getElementById('reset-form');
+
+    function checkFormValidity() {
+        const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+        const textMatches = confirmationText.value.trim() === 'RESET DATABASE';
+        
+        resetButton.disabled = !(allChecked && textMatches);
+        
+        if (allChecked && textMatches) {
+            resetButton.classList.remove('btn-danger');
+            resetButton.classList.add('btn-danger', 'pulse-animation');
+        } else {
+            resetButton.classList.remove('pulse-animation');
+        }
+    }
+
+    checkboxes.forEach(cb => cb.addEventListener('change', checkFormValidity));
+    confirmationText.addEventListener('input', checkFormValidity);
+
+    resetForm.addEventListener('submit', function(e) {
+        if (!confirm('⚠️ FINAL WARNING ⚠️\n\nThis will PERMANENTLY DELETE all data!\n\nAre you absolutely sure you want to continue?')) {
+            e.preventDefault();
+            return false;
+        }
+        
+        resetButton.disabled = true;
+        resetButton.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Resetting Database...';
+    });
+});
+</script>
+
+<style>
+.pulse-animation {
+    animation: pulse 2s infinite;
+}
+
+.card.border-danger {
+    border-width: 2px;
+}
+
+@@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.7); }
+    70% { box-shadow: 0 0 0 10px rgba(220, 53, 69, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(220, 53, 69, 0); }
+}
+</style>

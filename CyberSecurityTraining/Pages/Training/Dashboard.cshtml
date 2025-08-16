@@ -1,0 +1,241 @@
+@page
+@model CyberSecurityTraining.Pages.Training.DashboardModel
+@using CyberSecurityTraining.Models // Add the namespace where ProgressStatus is defined
+@{
+    ViewData["Title"] = "Training Dashboard";
+}
+
+<div class="container-fluid">
+    <!-- Welcome Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="jumbotron jumbotron-fluid bg-primary text-white">
+                <div class="container">
+                    <h1 class="display-4">Welcome, @(Model.CurrentUser?.FirstName ?? "User")!</h1>
+                    <p class="lead">Continue your cybersecurity training journey.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="row mb-4">
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Assigned Modules</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.AssignedModules.Count</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-book fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Completed</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.CompletedModulesCount</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-check-circle fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-info shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Overall Progress</div>
+                            <div class="row no-gutters align-items-center">
+                                <div class="col-auto">
+                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">@Math.Round(Model.OverallProgress, 1)%</div>
+                                </div>
+                                <div class="col">
+                                    <div class="progress progress-sm mr-2">
+                                        <div class="progress-bar bg-info" role="progressbar" style="width: @(Model.OverallProgress)%" aria-valuenow="@Model.OverallProgress" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Recent Quizzes</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.RecentQuizResults.Count</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-question-circle fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Training Modules -->
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Your Training Modules</h6>
+                </div>
+                <div class="card-body">
+                    @if (Model.AssignedModules.Any())
+                    {
+                        @foreach (var moduleWithProgress in Model.AssignedModules)
+                        {
+                            <div class="card mb-3">
+                                <div class="card-body">
+                                    <div class="row align-items-center">
+                                        <div class="col-md-8">
+                                            <h5 class="card-title">@moduleWithProgress.Module.Title</h5>
+                                            <p class="card-text text-muted">@moduleWithProgress.Module.Description</p>
+                                            
+                                            @if (moduleWithProgress.Progress != null)
+                                            {
+                                                <div class="progress mb-2" style="height: 20px;">
+                                                    <div class="progress-bar 
+                                                        @(moduleWithProgress.Progress.Status == ProgressStatus.Completed ? "bg-success" : 
+                                                          moduleWithProgress.Progress.Status == ProgressStatus.InProgress ? "bg-info" : "bg-secondary")" 
+                                                         role="progressbar" 
+                                                         style="width: @(moduleWithProgress.CompletionPercentage)%" 
+                                                         aria-valuenow="@moduleWithProgress.CompletionPercentage" 
+                                                         aria-valuemin="0" 
+                                                         aria-valuemax="100">
+                                                        @Math.Round(moduleWithProgress.CompletionPercentage, 1)%
+                                                    </div>
+                                                </div>
+                                                
+                                                <small class="text-muted">
+                                                    Status: <span class="badge 
+                                                        @(moduleWithProgress.Progress.Status == ProgressStatus.Completed ? "badge-success" : 
+                                                          moduleWithProgress.Progress.Status == ProgressStatus.InProgress ? "badge-info" : "badge-secondary")">
+                                                        @moduleWithProgress.Progress.Status
+                                                    </span>
+                                                    | Lessons: @moduleWithProgress.Progress.CompletedLessons / @moduleWithProgress.Progress.TotalLessons completed
+                                                </small>
+                                            }
+                                        </div>
+                                        <div class="col-md-4 text-right">
+                                            @if (moduleWithProgress.Progress?.Status == ProgressStatus.Completed)
+                                            {
+                                                <a asp-page="/Training/TakeModule" asp-route-id="@moduleWithProgress.Module.Id" class="btn btn-outline-success mb-2">
+                                                    <i class="fas fa-eye"></i> Review
+                                                </a>
+                                                <br />
+                                                <a href="/Training/Certificate?moduleId=@moduleWithProgress.Module.Id" class="btn btn-outline-primary">
+                                                    <i class="fas fa-certificate"></i> Certificate
+                                                </a>
+                                            }
+                                            else if (moduleWithProgress.Progress?.Status == ProgressStatus.InProgress)
+                                            {
+                                                <a asp-page="/Training/TakeModule" asp-route-id="@moduleWithProgress.Module.Id" class="btn btn-primary">
+                                                    <i class="fas fa-play"></i> Continue
+                                                </a>
+                                            }
+                                            else
+                                            {
+                                                <a asp-page="/Training/TakeModule" asp-route-id="@moduleWithProgress.Module.Id" class="btn btn-success">
+                                                    <i class="fas fa-play"></i> Start
+                                                </a>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="text-center py-4">
+                            <i class="fas fa-book fa-3x text-muted mb-3"></i>
+                            <h5>No Training Modules Assigned</h5>
+                            <p class="text-muted">Contact your administrator to get training modules assigned to you.</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Quiz Results -->
+        <div class="col-lg-4">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Recent Quiz Results</h6>
+                </div>
+                <div class="card-body">
+                    @if (Model.RecentQuizResults.Any())
+                    {
+                        @foreach (var result in Model.RecentQuizResults)
+                        {
+                            <div class="card mb-2">
+                                <div class="card-body p-3">
+                                    <h6 class="card-title">@result.Quiz.Title</h6>
+                                    <p class="card-text">
+                                        <small class="text-muted">@result.Quiz.Lesson.Module.Title</small>
+                                    </p>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span class="badge @(result.Passed ? "badge-success" : "badge-danger")">
+                                            @result.Score%
+                                        </span>
+                                        <small class="text-muted">@result.CompletedAt.ToString("MMM dd")</small>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <p class="text-muted text-center">No quiz results yet.</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.border-left-primary {
+    border-left: 0.25rem solid #4e73df!important;
+}
+.border-left-success {
+    border-left: 0.25rem solid #1cc88a!important;
+}
+.border-left-info {
+    border-left: 0.25rem solid #36b9cc!important;
+}
+.border-left-warning {
+    border-left: 0.25rem solid #f6c23e!important;
+}
+.text-gray-800 {
+    color: #5a5c69!important;
+}
+.text-gray-300 {
+    color: #dddfeb!important;
+}
+.progress-sm {
+    height: 0.5rem;
+}
+</style>

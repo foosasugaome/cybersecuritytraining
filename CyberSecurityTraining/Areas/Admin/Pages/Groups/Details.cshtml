@@ -1,0 +1,258 @@
+@page
+@model CyberSecurityTraining.Areas.Admin.Pages.Groups.DetailsModel
+@{
+    ViewData["Title"] = "Group Details";
+}
+
+<div class="container-fluid">
+    <!-- Breadcrumb Navigation -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a asp-area="Admin" asp-page="/Dashboard">
+                    <i class="fas fa-home"></i> Dashboard
+                </a>
+            </li>
+            <li class="breadcrumb-item">
+                <a asp-area="Admin" asp-page="/Groups/Index">
+                    <i class="fas fa-users"></i> Groups
+                </a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">
+                <i class="fas fa-info-circle"></i> @Model.UserGroup.Name
+            </li>
+        </ol>
+    </nav>
+
+    <!-- Success/Error Messages -->
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle"></i> @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="fas fa-exclamation-circle"></i> @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <!-- Group Information -->
+    <div class="row mb-4">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h4 class="card-title mb-0">
+                        <i class="fas fa-users me-2"></i>
+                        @Model.UserGroup.Name
+                    </h4>
+                    <div class="btn-group" role="group">
+                        <a asp-area="Admin" asp-page="./ModuleAssignments" asp-route-id="@Model.UserGroup.Id" 
+                           class="btn btn-outline-success btn-sm">
+                            <i class="fas fa-book"></i> Module Assignments
+                        </a>
+                        <a asp-area="Admin" asp-page="./Edit" asp-route-id="@Model.UserGroup.Id" 
+                           class="btn btn-outline-primary btn-sm">
+                            <i class="fas fa-edit"></i> Edit
+                        </a>
+                        <a asp-area="Admin" asp-page="./Delete" asp-route-id="@Model.UserGroup.Id" 
+                           class="btn btn-outline-danger btn-sm">
+                            <i class="fas fa-trash"></i> Delete
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <dl class="row">
+                        <dt class="col-sm-3">Company:</dt>
+                        <dd class="col-sm-9">
+                            <span class="badge bg-primary">@Model.UserGroup.Company?.Name</span>
+                        </dd>
+
+                        <dt class="col-sm-3">Description:</dt>
+                        <dd class="col-sm-9">
+                            @if (!string.IsNullOrEmpty(Model.UserGroup.Description))
+                            {
+                                <text>@Model.UserGroup.Description</text>
+                            }
+                            else
+                            {
+                                <em class="text-muted">No description provided</em>
+                            }
+                        </dd>
+
+                        <dt class="col-sm-3">Created:</dt>
+                        <dd class="col-sm-9">@Model.UserGroup.DateCreated.ToString("MMMM dd, yyyy 'at' h:mm tt")</dd>
+
+                        <dt class="col-sm-3">Total Members:</dt>
+                        <dd class="col-sm-9">
+                            <span class="badge bg-info">@Model.ActiveMembersCount active</span>
+                            @if (Model.TotalMembersCount > Model.ActiveMembersCount)
+                            {
+                                <span class="badge bg-secondary ms-1">@(Model.TotalMembersCount - Model.ActiveMembersCount) inactive</span>
+                            }
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-chart-pie"></i> Group Statistics
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row text-center">
+                        <div class="col-4">
+                            <div class="border-end">
+                                <h3 class="text-primary mb-1">@Model.ActiveMembersCount</h3>
+                                <small class="text-muted">Active Members</small>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="border-end">
+                                <h3 class="text-secondary mb-1">@Model.TotalMembersCount</h3>
+                                <small class="text-muted">Total Members</small>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <h3 class="text-success mb-1">@Model.AssignedModulesCount</h3>
+                            <small class="text-muted">Assigned Modules</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Group Members -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-user-friends me-2"></i>
+                        Active Group Members (@Model.ActiveMembersCount)
+                    </h5>
+                    <a asp-area="Admin" asp-page="/Users/Index" 
+                       class="btn btn-outline-primary btn-sm">
+                        <i class="fas fa-user-plus"></i> Manage Users
+                    </a>
+                </div>
+                <div class="card-body">
+                    @if (Model.ActiveMembers.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Joined Date</th>
+                                        <th>Added By</th>
+                                        <th class="text-center">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var member in Model.ActiveMembers)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <div class="avatar-sm bg-light rounded-circle d-flex align-items-center justify-content-center me-2">
+                                                        <i class="fas fa-user text-muted"></i>
+                                                    </div>
+                                                    <div>
+                                                        <div class="fw-medium">@member.User.FirstName @member.User.LastName</div>
+                                                        @if (!string.IsNullOrEmpty(member.User.Company?.Name))
+                                                        {
+                                                            <small class="text-muted">@member.User.Company.Name</small>
+                                                        }
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>@member.User.Email</td>
+                                            <td>@member.DateJoined.ToString("MMM dd, yyyy")</td>
+                                            <td>
+                                                @if (!string.IsNullOrEmpty(member.JoinedBy))
+                                                {
+                                                    <small class="text-muted">@member.JoinedBy</small>
+                                                }
+                                                else
+                                                {
+                                                    <small class="text-muted">System</small>
+                                                }
+                                            </td>
+                                            <td class="text-center">
+                                                <div class="btn-group btn-group-sm" role="group">
+                                                    <a asp-area="Admin" asp-page="/Users/Details" asp-route-id="@member.User.Id" 
+                                                       class="btn btn-outline-info" title="View User Details">
+                                                        <i class="fas fa-eye"></i>
+                                                    </a>
+                                                    <form method="post" asp-page-handler="RemoveMember" 
+                                                          asp-route-groupId="@Model.UserGroup.Id" 
+                                                          asp-route-userId="@member.User.Id" 
+                                                          class="d-inline"
+                                                          onsubmit="return confirm('Are you sure you want to remove this user from the group?');">
+                                                        <button type="submit" class="btn btn-outline-danger" title="Remove from Group">
+                                                            <i class="fas fa-user-minus"></i>
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center py-4">
+                            <i class="fas fa-users fa-3x text-muted mb-3"></i>
+                            <h5 class="text-muted">No Active Members</h5>
+                            <p class="text-muted">This group doesn't have any active members yet.</p>
+                            <a asp-area="Admin" asp-page="/Users/Index" class="btn btn-primary">
+                                <i class="fas fa-user-plus"></i> Add Members
+                            </a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between">
+                <a asp-area="Admin" asp-page="/Groups/Index" class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left"></i> Back to Groups
+                </a>
+                <div>
+                    <a asp-area="Admin" asp-page="./Edit" asp-route-id="@Model.UserGroup.Id" 
+                       class="btn btn-primary me-2">
+                        <i class="fas fa-edit"></i> Edit Group
+                    </a>
+                    <a asp-area="Admin" asp-page="./Delete" asp-route-id="@Model.UserGroup.Id" 
+                       class="btn btn-danger">
+                        <i class="fas fa-trash"></i> Delete Group
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.avatar-sm {
+    width: 32px;
+    height: 32px;
+}
+</style>

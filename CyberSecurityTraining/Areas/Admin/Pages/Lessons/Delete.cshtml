@@ -1,0 +1,204 @@
+@page "/Lessons/Delete/{id:int}"
+@model CyberSecurityTraining.Areas.Admin.Pages.Lessons.DeleteModel
+@{
+    ViewData["Title"] = "Delete Lesson";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="h3 mb-0 text-danger">
+                    <i class="fas fa-exclamation-triangle me-2"></i>Delete Lesson
+                </h1>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-0">
+                        <li class="breadcrumb-item"><a asp-area="Admin" asp-page="/Dashboard">Dashboard</a></li>
+                        <li class="breadcrumb-item"><a asp-area="Admin" asp-page="/Lessons/Index">Lessons</a></li>
+                        <li class="breadcrumb-item"><a asp-area="Admin" asp-page="/Lessons/Details" asp-route-id="@Model.Lesson.Id">@Model.Lesson.Title</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Delete</li>
+                    </ol>
+                </nav>
+            </div>
+
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="card border-danger">
+                        <div class="card-header bg-danger text-white">
+                            <h5 class="card-title mb-0">
+                                <i class="fas fa-trash me-2"></i>Confirm Deletion
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="alert alert-warning" role="alert">
+                                <h6 class="alert-heading">
+                                    <i class="fas fa-exclamation-triangle me-2"></i>Warning: This action cannot be undone!
+                                </h6>
+                                <p class="mb-0">
+                                    You are about to permanently delete this lesson and all its associated data. 
+                                    Please review the information below before proceeding.
+                                </p>
+                            </div>
+
+                            <h6 class="mb-3">Lesson Details:</h6>
+                            <dl class="row">
+                                <dt class="col-sm-3">Title:</dt>
+                                <dd class="col-sm-9">@Model.Lesson.Title</dd>
+
+                                <dt class="col-sm-3">Module:</dt>
+                                <dd class="col-sm-9">@Model.ModuleName</dd>
+
+                                <dt class="col-sm-3">Order:</dt>
+                                <dd class="col-sm-9">#@Model.Lesson.Order</dd>
+
+                                <dt class="col-sm-3">Status:</dt>
+                                <dd class="col-sm-9">
+                                    <span class="badge @(Model.Lesson.IsActive ? "bg-success" : "bg-warning text-dark")">
+                                        @(Model.Lesson.IsActive ? "Active" : "Inactive")
+                                    </span>
+                                </dd>
+
+                                <dt class="col-sm-3">Created:</dt>
+                                <dd class="col-sm-9">@Model.Lesson.DateCreated.ToString("MMM dd, yyyy 'at' h:mm tt")</dd>
+
+                                @if (Model.Lesson.DateModified.HasValue)
+                                {
+                                    <dt class="col-sm-3">Last Modified:</dt>
+                                    <dd class="col-sm-9">@Model.Lesson.DateModified.Value.ToString("MMM dd, yyyy 'at' h:mm tt")</dd>
+                                }
+                            </dl>
+
+                            @if (Model.HasDependencies)
+                            {
+                                <div class="alert alert-danger mt-4" role="alert">
+                                    <h6 class="alert-heading">
+                                        <i class="fas fa-link me-2"></i>Dependencies Found
+                                    </h6>
+                                    <p>This lesson has the following dependencies that will also be deleted:</p>
+                                    <ul class="mb-0">
+                                        @foreach (var dependency in Model.Dependencies)
+                                        {
+                                            <li>@dependency</li>
+                                        }
+                                    </ul>
+                                </div>
+                            }
+
+                            <div class="d-flex justify-content-between mt-4">
+                                <div>
+                                    <a asp-area="Admin" asp-page="./Details" asp-route-id="@Model.Lesson.Id" class="btn btn-outline-secondary">
+                                        <i class="fas fa-arrow-left me-1"></i>Cancel
+                                    </a>
+                                    <a asp-area="Admin" asp-page="./Index" class="btn btn-outline-secondary">
+                                        <i class="fas fa-list me-1"></i>Back to Lessons
+                                    </a>
+                                </div>
+                                <form method="post" class="d-inline">
+                                    <button type="submit" class="btn btn-danger" id="deleteButton" onclick="return confirmDelete()">
+                                        <i class="fas fa-trash me-1"></i>Delete Lesson
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">
+                                <i class="fas fa-info-circle me-2"></i>Impact Summary
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row text-center">
+                                <div class="col-6">
+                                    <div class="border-end">
+                                        <h4 class="text-primary">@Model.QuizCount</h4>
+                                        <small class="text-muted">Quizzes</small>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <h4 class="text-warning">@Model.UsersWithProgress</h4>
+                                    <small class="text-muted">User Progress</small>
+                                </div>
+                            </div>
+                            
+                            @if (Model.QuizCount > 0 || Model.UsersWithProgress > 0)
+                            {
+                                <hr>
+                                <p class="small text-muted mb-0">
+                                    <i class="fas fa-exclamation-circle me-1"></i>
+                                    All associated data will be permanently deleted.
+                                </p>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="card mt-3">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">
+                                <i class="fas fa-lightbulb me-2"></i>Alternative Actions
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <p class="small mb-3">Instead of deleting, consider:</p>
+                            <div class="d-grid gap-2">
+                                <a asp-area="Admin" asp-page="./Edit" asp-route-id="@Model.Lesson.Id" class="btn btn-outline-primary btn-sm">
+                                    <i class="fas fa-edit me-1"></i>Edit Lesson
+                                </a>
+                                @if (Model.Lesson.IsActive)
+                                {
+                                    <button class="btn btn-outline-warning btn-sm" onclick="markInactive()">
+                                        <i class="fas fa-pause me-1"></i>Mark as Inactive
+                                    </button>
+                                }
+                                else
+                                {
+                                    <button class="btn btn-outline-success btn-sm" onclick="markActive()">
+                                        <i class="fas fa-play me-1"></i>Mark as Active
+                                    </button>
+                                }
+                            </div>
+                            <p class="small text-muted mt-2 mb-0">
+                                Inactive lessons are hidden from users but preserve all data.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function confirmDelete() {
+            return confirm('Are you absolutely sure you want to delete this lesson? This action cannot be undone and will permanently remove all associated quizzes, questions, and user progress.');
+        }
+
+        function markInactive() {
+            if (confirm('Mark this lesson as inactive? It will be hidden from users but all data will be preserved.')) {
+                // You could implement this with an AJAX call to update the lesson status
+                alert('This feature would be implemented to toggle lesson status via AJAX.');
+            }
+        }
+
+        function markActive() {
+            if (confirm('Mark this lesson as active? It will be visible to users again.')) {
+                // You could implement this with an AJAX call to update the lesson status
+                alert('This feature would be implemented to toggle lesson status via AJAX.');
+            }
+        }
+
+        // Add visual feedback when delete button is clicked
+        document.getElementById('deleteButton').addEventListener('click', function(e) {
+            if (confirmDelete()) {
+                this.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>Deleting...';
+                this.disabled = true;
+            } else {
+                e.preventDefault();
+            }
+        });
+    </script>
+}

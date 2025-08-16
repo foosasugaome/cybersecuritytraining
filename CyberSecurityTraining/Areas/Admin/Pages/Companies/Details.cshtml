@@ -1,0 +1,173 @@
+@page
+@model CyberSecurityTraining.Areas.Admin.Pages.Companies.DetailsModel
+@{
+    ViewData["Title"] = "Company Details";
+}
+
+<div class="container-fluid">
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Company Details</h1>
+        <div>
+            <a asp-area="Admin" asp-page="./Edit" asp-route-id="@Model.Company.Id" class="btn btn-warning">
+                <i class="fas fa-edit"></i> Edit
+            </a>
+            <a asp-area="Admin" asp-page="./Index" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Back to List
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Company Information -->
+        <div class="col-md-6">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Company Information</h6>
+                </div>
+                <div class="card-body">
+                    <dl class="row">
+                        <dt class="col-sm-4">Name:</dt>
+                        <dd class="col-sm-8">@Model.Company.Name</dd>
+
+                        <dt class="col-sm-4">Description:</dt>
+                        <dd class="col-sm-8">@(Model.Company.Description ?? "No description provided")</dd>
+
+                        <dt class="col-sm-4">Created:</dt>
+                        <dd class="col-sm-8">@Model.Company.DateCreated.ToString("MMMM dd, yyyy 'at' h:mm tt")</dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistics -->
+        <div class="col-md-6">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-success">Statistics</h6>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="text-center">
+                                <div class="h2 font-weight-bold text-primary">@Model.Users.Count</div>
+                                <div class="text-gray-600">Users</div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="text-center">
+                                <div class="h2 font-weight-bold text-success">@Model.UserGroups.Count</div>
+                                <div class="text-gray-600">Groups</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Users -->
+        <div class="col-md-6">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Users (@Model.Users.Count)</h6>
+                    <a asp-area="Admin" asp-page="/Users/Create" asp-route-companyId="@Model.Company.Id" class="btn btn-primary btn-sm">
+                        <i class="fas fa-plus"></i> Add User
+                    </a>
+                </div>
+                <div class="card-body">
+                    @if (Model.Users.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var user in Model.Users)
+                                    {
+                                        <tr>
+                                            <td>@($"{user.FirstName} {user.LastName}")</td>
+                                            <td>@user.Email</td>
+                                            <td>
+                                                <a asp-area="Admin" asp-page="/Users/Details" asp-route-id="@user.Id" class="btn btn-outline-secondary btn-sm">
+                                                    <i class="fas fa-eye"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center text-muted py-4">
+                            <i class="fas fa-users fa-3x mb-3"></i>
+                            <p>No users assigned to this company yet.</p>
+                            <a asp-area="Admin" asp-page="/Users/Create" asp-route-companyId="@Model.Company.Id" class="btn btn-primary">
+                                <i class="fas fa-plus"></i> Add First User
+                            </a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- User Groups -->
+        <div class="col-md-6">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-success">User Groups (@Model.UserGroups.Count)</h6>
+                    <a asp-area="Admin" asp-page="/Groups/Create" asp-route-companyId="@Model.Company.Id" class="btn btn-success btn-sm">
+                        <i class="fas fa-plus"></i> Add Group
+                    </a>
+                </div>
+                <div class="card-body">
+                    @if (Model.UserGroups.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Description</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var group in Model.UserGroups)
+                                    {
+                                        <tr>
+                                            <td>@group.Name</td>
+                                            <td>@(group.Description ?? "No description")</td>
+                                            <td>
+                                                <a asp-area="Admin" asp-page="/Groups/Details" asp-route-id="@group.Id" class="btn btn-outline-secondary btn-sm">
+                                                    <i class="fas fa-eye"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center text-muted py-4">
+                            <i class="fas fa-layer-group fa-3x mb-3"></i>
+                            <p>No user groups created for this company yet.</p>
+                            <a asp-area="Admin" asp-page="/Groups/Create" asp-route-companyId="@Model.Company.Id" class="btn btn-success">
+                                <i class="fas fa-plus"></i> Add First Group
+                            </a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
