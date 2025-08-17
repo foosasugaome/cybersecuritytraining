@@ -9,6 +9,7 @@ namespace CyberSecurityTraining.Pages;
 public class ErrorModel : PageModel
 {
     public string? RequestId { get; set; }
+    public int? ErrorStatusCode { get; set; }
 
     public bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
 
@@ -19,9 +20,17 @@ public class ErrorModel : PageModel
         _logger = logger;
     }
 
-    public void OnGet()
+    public void OnGet(int? statusCode = null)
     {
         RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier;
+        ErrorStatusCode = statusCode ?? HttpContext.Response.StatusCode;
+        
+        // Log the error for monitoring purposes
+        _logger.LogWarning("Error page accessed. StatusCode: {StatusCode}, RequestId: {RequestId}, Path: {Path}, User: {User}", 
+            ErrorStatusCode, 
+            RequestId, 
+            HttpContext.Request.Path, 
+            User.Identity?.Name ?? "Anonymous");
     }
 }
 

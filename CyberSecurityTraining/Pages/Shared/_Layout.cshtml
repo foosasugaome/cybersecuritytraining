@@ -43,6 +43,15 @@
                                         <li><a class="dropdown-item" asp-area="Admin" asp-page="/Lessons/Index"><i class="fas fa-file-alt"></i> Lessons</a></li>
                                         <li><a class="dropdown-item" asp-area="Admin" asp-page="/Quizzes/Index"><i class="fas fa-question-circle"></i> Quizzes</a></li>
                                         <li><a class="dropdown-item" asp-area="Admin" asp-page="/Questions/Index"><i class="fas fa-list-ol"></i> Questions</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li class="dropdown-submenu">
+                                            <a class="dropdown-item dropdown-toggle" href="#">
+                                                <i class="fas fa-cog"></i> Settings
+                                            </a>
+                                            <ul class="dropdown-menu">
+                                                <li><a class="dropdown-item" asp-area="Admin" asp-page="/SystemAdmin/DatabaseManager"><i class="fas fa-database text-danger"></i> Database Management</a></li>
+                                            </ul>
+                                        </li>
                                     </ul>
                                 </li>
                             </ul>
@@ -111,6 +120,45 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <!-- Custom CSS for nested dropdowns -->
+    <style>
+        .dropdown-submenu {
+            position: relative;
+        }
+
+        .dropdown-submenu > .dropdown-menu {
+            top: 0;
+            left: 100%;
+            margin-top: -6px;
+            margin-left: -1px;
+        }
+
+        .dropdown-submenu:hover > .dropdown-menu {
+            display: block;
+        }
+
+        .dropdown-submenu.pull-left {
+            float: none;
+        }
+
+        .dropdown-submenu.pull-left > .dropdown-menu {
+            left: -100%;
+            margin-left: 10px;
+        }
+    </style>
+
+    <!-- Custom JavaScript for nested dropdowns -->
+    <script>
+        $(document).ready(function() {
+            // Handle nested dropdown on hover
+            $('.dropdown-submenu a.dropdown-toggle').on("click", function(e) {
+                $(this).next('ul').toggle();
+                e.stopPropagation();
+                e.preventDefault();
+            });
+        });
+    </script>
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>

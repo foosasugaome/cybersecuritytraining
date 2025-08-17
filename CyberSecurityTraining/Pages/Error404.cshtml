@@ -1,0 +1,178 @@
+@page
+@model CyberSecurityTraining.Pages.ErrorModel
+@{
+    ViewData["Title"] = "Page Not Found";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 text-center">
+            <div class="error-template">
+                <div class="error-details">
+                    <div class="error-number">
+                        <span class="display-1 text-primary">4</span>
+                        <i class="fas fa-shield-alt text-warning display-1 mx-3"></i>
+                        <span class="display-1 text-primary">4</span>
+                    </div>
+                    <h2 class="mt-4 mb-3">Oops! Page Not Found</h2>
+                    <p class="lead text-muted mb-4">
+                        The page you're looking for seems to have vanished into cyberspace. 
+                        Don't worry, our security team is on it!
+                    </p>
+                </div>
+                
+                <div class="error-actions mb-5">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            @if (User.Identity?.IsAuthenticated == true)
+                            {
+                                @if (User.IsInRole("Admin"))
+                                {
+                                    <a asp-area="Admin" asp-page="/Dashboard" class="btn btn-primary btn-lg">
+                                        <i class="fas fa-tachometer-alt me-2"></i>
+                                        Go to Admin Dashboard
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a asp-page="/Training/Dashboard" class="btn btn-primary btn-lg">
+                                        <i class="fas fa-graduation-cap me-2"></i>
+                                        Go to Training Dashboard
+                                    </a>
+                                }
+                            }
+                            else
+                            {
+                                <a asp-page="/Index" class="btn btn-primary btn-lg">
+                                    <i class="fas fa-home me-2"></i>
+                                    Go to Home Page
+                                </a>
+                            }
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <button onclick="history.back()" class="btn btn-outline-secondary btn-lg">
+                                <i class="fas fa-arrow-left me-2"></i>
+                                Go Back
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card bg-light border-0">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <i class="fas fa-lightbulb text-warning me-2"></i>
+                            What can you do?
+                        </h5>
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <div class="text-center">
+                                    <i class="fas fa-search fa-2x text-primary mb-2"></i>
+                                    <h6>Check the URL</h6>
+                                    <p class="small text-muted">Make sure the web address is correct</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="text-center">
+                                    <i class="fas fa-sync-alt fa-2x text-success mb-2"></i>
+                                    <h6>Refresh the Page</h6>
+                                    <p class="small text-muted">Sometimes a simple refresh helps</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="text-center">
+                                    <i class="fas fa-headset fa-2x text-info mb-2"></i>
+                                    <h6>Contact Support</h6>
+                                    <p class="small text-muted">We're here to help you get back on track</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                @if (User.Identity?.IsAuthenticated == true)
+                {
+                    <div class="mt-4">
+                        <h6 class="text-muted">Quick Links:</h6>
+                        <div class="btn-group-vertical btn-group-sm" role="group">
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <a asp-area="Admin" asp-page="/Users/Index" class="btn btn-outline-primary">
+                                    <i class="fas fa-users me-1"></i> Manage Users
+                                </a>
+                                <a asp-area="Admin" asp-page="/Modules/Index" class="btn btn-outline-primary">
+                                    <i class="fas fa-book me-1"></i> Manage Modules
+                                </a>
+                            }
+                            else
+                            {
+                                <a asp-page="/Training/Dashboard" class="btn btn-outline-primary">
+                                    <i class="fas fa-chart-line me-1"></i> View Progress
+                                </a>
+                                <a asp-page="/Account/Profile" class="btn btn-outline-primary">
+                                    <i class="fas fa-user me-1"></i> Edit Profile
+                                </a>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.error-template {
+    padding: 40px 15px;
+}
+
+.error-number {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.error-details h2 {
+    color: #333;
+    font-weight: 600;
+}
+
+.error-actions .btn {
+    margin: 5px;
+}
+
+.card {
+    border-radius: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.btn-group-vertical .btn {
+    text-align: left;
+    border-radius: 0;
+}
+
+.btn-group-vertical .btn:first-child {
+    border-top-left-radius: 0.375rem;
+    border-top-right-radius: 0.375rem;
+}
+
+.btn-group-vertical .btn:last-child {
+    border-bottom-left-radius: 0.375rem;
+    border-bottom-right-radius: 0.375rem;
+}
+
+@@media (max-width: 768px) {
+    .error-number {
+        flex-direction: column;
+    }
+    
+    .error-number .display-1 {
+        font-size: 4rem;
+    }
+    
+    .error-number .fa-shield-alt {
+        margin: 10px 0 !important;
+    }
+}
+</style>

@@ -1,0 +1,135 @@
+@page
+@model CyberSecurityTraining.Pages.Account.ProfileModel
+@{
+    ViewData["Title"] = "Profile";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-user me-2"></i>
+                        My Profile
+                    </h4>
+                </div>
+                <div class="card-body">
+                    @if (!string.IsNullOrEmpty(Model.StatusMessage))
+                    {
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <i class="fas fa-check-circle me-2"></i>
+                            @Model.StatusMessage
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    }
+
+                    <form method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                        <!-- Email (Read-only) -->
+                        <div class="mb-3">
+                            <label class="form-label">
+                                <i class="fas fa-envelope me-2"></i>
+                                Email Address
+                            </label>
+                            <input type="email" class="form-control" value="@Model.Email" readonly disabled>
+                            <div class="form-text">
+                                <i class="fas fa-info-circle me-1"></i>
+                                Email address cannot be changed. Contact administrator if you need to update your email.
+                            </div>
+                        </div>
+
+                        <!-- Personal Information Section -->
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="Input.FirstName" class="form-label">
+                                        <i class="fas fa-user me-2"></i>
+                                        First Name
+                                    </label>
+                                    <input asp-for="Input.FirstName" class="form-control" autocomplete="given-name" />
+                                    <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="Input.LastName" class="form-label">
+                                        <i class="fas fa-user me-2"></i>
+                                        Last Name
+                                    </label>
+                                    <input asp-for="Input.LastName" class="form-control" autocomplete="family-name" />
+                                    <span asp-validation-for="Input.LastName" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr class="my-4">
+
+                        <!-- Password Change Section -->
+                        <h5 class="mb-3">
+                            <i class="fas fa-lock me-2"></i>
+                            Change Password
+                        </h5>
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle me-2"></i>
+                            Leave password fields blank if you don't want to change your password.
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label asp-for="Input.CurrentPassword" class="form-label">
+                                        <i class="fas fa-key me-2"></i>
+                                        Current Password
+                                    </label>
+                                    <input asp-for="Input.CurrentPassword" class="form-control" autocomplete="current-password" />
+                                    <span asp-validation-for="Input.CurrentPassword" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label asp-for="Input.NewPassword" class="form-label">
+                                        <i class="fas fa-lock me-2"></i>
+                                        New Password
+                                    </label>
+                                    <input asp-for="Input.NewPassword" class="form-control" autocomplete="new-password" />
+                                    <span asp-validation-for="Input.NewPassword" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label asp-for="Input.ConfirmNewPassword" class="form-label">
+                                        <i class="fas fa-lock me-2"></i>
+                                        Confirm New Password
+                                    </label>
+                                    <input asp-for="Input.ConfirmNewPassword" class="form-control" autocomplete="new-password" />
+                                    <span asp-validation-for="Input.ConfirmNewPassword" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-4">
+                            <div class="col-md-6">
+                                <button type="submit" class="btn btn-primary btn-lg w-100">
+                                    <i class="fas fa-save me-2"></i>
+                                    Update Profile
+                                </button>
+                            </div>
+                            <div class="col-md-6">
+                                <a asp-page="/Training/Dashboard" class="btn btn-secondary btn-lg w-100">
+                                    <i class="fas fa-arrow-left me-2"></i>
+                                    Back to Dashboard
+                                </a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
