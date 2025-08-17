@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CyberEd - Ultra Minimalist Design</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #000000;
+            --secondary: #666666;
+            --accent: #0066cc;
+            --success: #00cc44;
+            --warning: #ff9900;
+            --bg: #ffffff;
+            --bg-alt: #fafafa;
+            --border: #e0e0e0;
+            --text: #000000;
+            --text-light: #666666;
+            --text-lighter: #999999;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.5;
+            font-size: 16px;
+        }
+
+        /* Header */
+        .header {
+            border-bottom: 1px solid var(--border);
+            background: var(--bg);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 300;
+            color: var(--text);
+            text-decoration: none;
+            letter-spacing: -0.5px;
+        }
+
+        .nav {
+            display: flex;
+            gap: 3rem;
+        }
+
+        .nav a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 400;
+            transition: color 0.2s;
+            position: relative;
+        }
+
+        .nav a:hover,
+        .nav a.active {
+            color: var(--text);
+        }
+
+        .nav a.active::after {
+            content: '';
+            position: absolute;
+            bottom: -20px;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: var(--text);
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--text);
+            color: var(--bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        /* Main */
+        .main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        .page-title {
+            font-size: 48px;
+            font-weight: 200;
+            color: var(--text);
+            margin-bottom: 0.5rem;
+            letter-spacing: -1px;
+        }
+
+        .page-subtitle {
+            font-size: 18px;
+            color: var(--text-light);
+            margin-bottom: 4rem;
+            font-weight: 300;
+        }
+
+        /* Stats */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 3rem;
+            margin-bottom: 5rem;
+        }
+
+        .stat {
+            text-align: left;
+        }
+
+        .stat-number {
+            font-size: 64px;
+            font-weight: 100;
+            color: var(--text);
+            line-height: 1;
+            margin-bottom: 0.5rem;
+            letter-spacing: -2px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 400;
+        }
+
+        .stat-change {
+            font-size: 12px;
+            color: var(--text-lighter);
+            margin-top: 0.25rem;
+        }
+
+        /* Content Grid */
+        .content {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 5rem;
+        }
+
+        .section-title {
+            font-size: 24px;
+            font-weight: 300;
+            color: var(--text);
+            margin-bottom: 2rem;
+            letter-spacing: -0.5px;
+        }
+
+        /* Course List */
+        .course-list {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .course {
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 2rem;
+            transition: opacity 0.2s;
+        }
+
+        .course:hover {
+            opacity: 0.7;
+        }
+
+        .course:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .course-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .course-title {
+            font-size: 20px;
+            font-weight: 400;
+            color: var(--text);
+            margin-bottom: 0.25rem;
+        }
+
+        .course-meta {
+            font-size: 14px;
+            color: var(--text-light);
+        }
+
+        .course-progress {
+            font-size: 14px;
+            color: var(--text-lighter);
+            text-align: right;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 1px;
+            background: var(--border);
+            margin: 1rem 0;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--text);
+            transition: width 0.3s ease;
+        }
+
+        .course-action {
+            color: var(--text);
+            text-decoration: none;
+            font-size: 14px;
+            border-bottom: 1px solid var(--text);
+            padding-bottom: 1px;
+            transition: opacity 0.2s;
+        }
+
+        .course-action:hover {
+            opacity: 0.6;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            padding-left: 2rem;
+            border-left: 1px solid var(--border);
+        }
+
+        .achievement {
+            text-align: center;
+            padding: 3rem 0;
+        }
+
+        .achievement-icon {
+            font-size: 48px;
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+        }
+
+        .achievement-title {
+            font-size: 18px;
+            font-weight: 400;
+            color: var(--text);
+            margin-bottom: 0.5rem;
+        }
+
+        .achievement-desc {
+            font-size: 14px;
+            color: var(--text-light);
+            line-height: 1.6;
+            margin-bottom: 2rem;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background: var(--text);
+            color: var(--bg);
+            text-decoration: none;
+            font-size: 14px;
+            transition: opacity 0.2s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            opacity: 0.8;
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--text);
+            border: 1px solid var(--text);
+        }
+
+        .btn-outline:hover {
+            background: var(--text);
+            color: var(--bg);
+        }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            .nav {
+                display: none;
+            }
+            
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 2rem;
+            }
+            
+            .content {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+            
+            .sidebar {
+                padding-left: 0;
+                border-left: none;
+                border-top: 1px solid var(--border);
+                padding-top: 3rem;
+            }
+            
+            .page-title {
+                font-size: 36px;
+            }
+            
+            .stat-number {
+                font-size: 48px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <a href="#" class="logo">CyberEd</a>
+            <nav class="nav">
+                <a href="#" class="active">Dashboard</a>
+                <a href="#">Courses</a>
+                <a href="#">Progress</a>
+                <a href="#">Profile</a>
+            </nav>
+            <div class="user-menu">
+                <div class="user-avatar">JS</div>
+            </div>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="page-title">Learning</div>
+        <div class="page-subtitle">Continue your cybersecurity education journey</div>
+
+        <section class="stats">
+            <div class="stat">
+                <div class="stat-number">08</div>
+                <div class="stat-label">Completed</div>
+                <div class="stat-change">+2 this month</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">92</div>
+                <div class="stat-label">Average %</div>
+                <div class="stat-change">+5% improvement</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">24</div>
+                <div class="stat-label">Hours</div>
+                <div class="stat-change">this month</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">03</div>
+                <div class="stat-label">Certificates</div>
+                <div class="stat-change">ready to download</div>
+            </div>
+        </section>
+
+        <div class="content">
+            <section>
+                <h2 class="section-title">Active Courses</h2>
+                <div class="course-list">
+                    <div class="course">
+                        <div class="course-header">
+                            <div>
+                                <div class="course-title">Advanced Cryptography</div>
+                                <div class="course-meta">8 modules • 4.5 hours • Advanced</div>
+                            </div>
+                            <div class="course-progress">75%</div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 75%"></div>
+                        </div>
+                        <a href="#" class="course-action">Continue Learning</a>
+                    </div>
+
+                    <div class="course">
+                        <div class="course-header">
+                            <div>
+                                <div class="course-title">Network Security</div>
+                                <div class="course-meta">6 modules • 3 hours • Intermediate</div>
+                            </div>
+                            <div class="course-progress">45%</div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 45%"></div>
+                        </div>
+                        <a href="#" class="course-action">Resume</a>
+                    </div>
+
+                    <div class="course">
+                        <div class="course-header">
+                            <div>
+                                <div class="course-title">Incident Response</div>
+                                <div class="course-meta">5 modules • 2.5 hours • Beginner</div>
+                            </div>
+                            <div class="course-progress">0%</div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 0%"></div>
+                        </div>
+                        <a href="#" class="course-action">Start Course</a>
+                    </div>
+                </div>
+            </section>
+
+            <aside class="sidebar">
+                <h2 class="section-title">Achievement</h2>
+                <div class="achievement">
+                    <div class="achievement-icon">
+                        <i class="fas fa-award"></i>
+                    </div>
+                    <div class="achievement-title">Security Fundamentals</div>
+                    <div class="achievement-desc">
+                        Completed foundational cybersecurity training with excellence
+                    </div>
+                    <a href="#" class="btn">Download Certificate</a>
+                </div>
+            </aside>
+        </div>
+    </main>
+</body>
+</html>
