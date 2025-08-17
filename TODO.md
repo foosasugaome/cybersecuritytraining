@@ -11,7 +11,15 @@
 
 ## 🚀 High Priority Improvements
 
-### 🔐 Security & Authentication
+### � Critical Bug Fixes
+- [ ] **Certificate Download Issue** 
+  - PDF certificate download button not working
+  - Form submission appears to fail silently
+  - Antiforgery token added but issue persists
+  - Need to investigate form handling and error logging
+  - Test both comprehensive and module-specific certificates
+
+### �🔐 Security & Authentication
 - [ ] **Two-Factor Authentication (2FA)**
   - Email-based 2FA implementation
   - QR code generation for authenticator apps

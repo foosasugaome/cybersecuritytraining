@@ -112,6 +112,7 @@
                     </div>
                     
                     <form method="post">
+                        @Html.AntiForgeryToken()
                         @if (!Model.IsComprehensiveCertificate)
                         {
                             <input type="hidden" asp-for="Module.Id" />
