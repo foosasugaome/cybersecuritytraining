@@ -179,9 +179,9 @@
                             </h5>
                         </div>
                         <div class="card-body">
-                            <p><strong>Question Position:</strong> @Model.Question.Order of @Model.Question.Quiz.Questions.Count</p>
-                            <p><strong>Answer Options:</strong> @Model.Question.Options.Count</p>
-                            <p><strong>Correct Answers:</strong> @Model.Question.Options.Count(o => o.IsCorrect)</p>
+                            <p><strong>Question Position:</strong> @Model.Question.Order of @(Model.Question.Quiz?.Questions?.Count ?? 0)</p>
+                            <p><strong>Answer Options:</strong> @(Model.Question.Options?.Count ?? 0)</p>
+                            <p><strong>Correct Answers:</strong> @(Model.Question.Options?.Count(o => o.IsCorrect) ?? 0)</p>
                             
                             <div class="mt-3">
                                 <small class="text-muted">

@@ -41,7 +41,7 @@ namespace CyberSecurityTraining.Pages.Training
             }
 
             // Load the quiz result with related data
-            QuizResult = await _context.UserQuizResults
+            var quizResult = await _context.UserQuizResults
                 .Include(r => r.Quiz)
                     .ThenInclude(q => q.Lesson)
                 .Include(r => r.Quiz)
@@ -53,23 +53,25 @@ namespace CyberSecurityTraining.Pages.Training
                     .ThenInclude(a => a.SelectedOption)
                 .FirstOrDefaultAsync(r => r.Id == id && r.UserId == user.Id);
 
-            if (QuizResult == null)
+            if (quizResult == null)
             {
                 return NotFound();
             }
+            QuizResult = quizResult;
 
             Quiz = QuizResult.Quiz!;
 
             // Get the module this quiz belongs to
-            Module = await _context.Modules
+            var module = await _context.Modules
                 .Include(m => m.Lessons)
                     .ThenInclude(l => l.Quizzes)
                 .FirstOrDefaultAsync(m => m.Lessons.Any(l => l.Quizzes.Any(q => q.Id == Quiz.Id)));
 
-            if (Module == null)
+            if (module == null)
             {
                 return NotFound();
             }
+            Module = module;
 
             // Check access to this module
             var hasAccess = await CheckModuleAccessAsync(user.Id, Module.Id);

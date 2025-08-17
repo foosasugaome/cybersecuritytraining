@@ -83,14 +83,15 @@ namespace CyberSecurityTraining.Pages.Training
         {
             IsComprehensiveCertificate = false;
 
-            Module = await _context.Modules
+            var module = await _context.Modules
                 .Where(m => m.Id == moduleId && m.IsActive)
                 .FirstOrDefaultAsync();
 
-            if (Module == null)
+            if (module == null)
             {
                 return NotFound();
             }
+            Module = module;
 
             // Check if user has access to this module
             var hasAccess = await CheckModuleAccessAsync(Module.Id);
@@ -100,15 +101,16 @@ namespace CyberSecurityTraining.Pages.Training
             }
 
             // Get module progress
-            ModuleProgress = await _context.UserModuleProgress
+            var moduleProgress = await _context.UserModuleProgress
                 .Where(p => p.UserId == CurrentUser!.Id && p.ModuleId == Module.Id)
                 .FirstOrDefaultAsync();
 
-            if (ModuleProgress == null || ModuleProgress.Status != ProgressStatus.Completed || !ModuleProgress.CertificateIssued)
+            if (moduleProgress == null || moduleProgress.Status != ProgressStatus.Completed || !moduleProgress.CertificateIssued)
             {
                 TempData["ErrorMessage"] = "Certificate is only available for completed modules.";
                 return RedirectToPage("/Training/Dashboard");
             }
+            ModuleProgress = moduleProgress;
 
             return Page();
         }
@@ -178,14 +180,15 @@ namespace CyberSecurityTraining.Pages.Training
             }
             CurrentUser = currentUser;
 
-            Module = await _context.Modules
+            var module = await _context.Modules
                 .Where(m => m.Id == moduleId && m.IsActive)
                 .FirstOrDefaultAsync();
 
-            if (Module == null)
+            if (module == null)
             {
                 return NotFound();
             }
+            Module = module;
 
             // Check if user has access to this module
             var hasAccess = await CheckModuleAccessAsync(Module.Id);
@@ -195,15 +198,16 @@ namespace CyberSecurityTraining.Pages.Training
             }
 
             // Get module progress
-            ModuleProgress = await _context.UserModuleProgress
+            var moduleProgress = await _context.UserModuleProgress
                 .Where(p => p.UserId == CurrentUser.Id && p.ModuleId == Module.Id)
                 .FirstOrDefaultAsync();
 
-            if (ModuleProgress == null || ModuleProgress.Status != ProgressStatus.Completed || !ModuleProgress.CertificateIssued)
+            if (moduleProgress == null || moduleProgress.Status != ProgressStatus.Completed || !moduleProgress.CertificateIssued)
             {
                 TempData["ErrorMessage"] = "Certificate is only available for completed modules.";
                 return RedirectToPage("/Training/Dashboard");
             }
+            ModuleProgress = moduleProgress;
 
             try
             {
