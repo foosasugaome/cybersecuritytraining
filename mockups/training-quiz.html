@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz: Public Key Cryptography - CyberSecurity Training</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="css/ultra-minimalist.css" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <a href="/" class="logo">CyberSec Training</a>
+            <nav class="nav">
+                <a href="/training/dashboard">Dashboard</a>
+                <a href="/training/modules" class="active">Modules</a>
+                <a href="/training/progress">Progress</a>
+                <a href="/training/certificates">Certificates</a>
+            </nav>
+            <div class="user-menu">
+                <div class="user-info">
+                    <div class="user-name">John Smith</div>
+                    <div class="user-role">Student</div>
+                </div>
+                <div class="user-avatar">JS</div>
+            </div>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="breadcrumb">
+            <a href="/training/dashboard">Dashboard</a> / <a href="/training/modules">Modules</a> / <a href="/training/module/1">Advanced Cryptography</a> / Quiz
+        </div>
+
+        <div class="page-title">Quiz: Public Key Cryptography</div>
+        <div class="page-subtitle">Test your understanding of asymmetric encryption principles</div>
+
+        <div class="content-full">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4rem; padding-bottom: 2rem; border-bottom: 1px solid var(--border);">
+                <div>
+                    <div style="font-size: 14px; color: var(--text-light); margin-bottom: 0.5rem;">Progress</div>
+                    <div style="font-size: 20px; font-weight: 300;">Question 2 of 5</div>
+                </div>
+                <div style="text-align: right;">
+                    <div style="font-size: 14px; color: var(--text-light);">Time Remaining</div>
+                    <div style="font-size: 20px; font-weight: 300;">8:45</div>
+                </div>
+            </div>
+
+            <form class="quiz-form">
+                <div class="question">
+                    <h3 class="question-title">Which of the following best describes the main advantage of public key cryptography over symmetric cryptography?</h3>
+                    
+                    <div class="option">
+                        <label>
+                            <input type="radio" name="q2" value="a" style="margin-right: 1rem;">
+                            It is faster for encrypting large amounts of data
+                        </label>
+                    </div>
+                    
+                    <div class="option">
+                        <label>
+                            <input type="radio" name="q2" value="b" style="margin-right: 1rem;">
+                            It eliminates the need for secure key distribution
+                        </label>
+                    </div>
+                    
+                    <div class="option">
+                        <label>
+                            <input type="radio" name="q2" value="c" style="margin-right: 1rem;">
+                            It uses shorter keys for the same level of security
+                        </label>
+                    </div>
+                    
+                    <div class="option">
+                        <label>
+                            <input type="radio" name="q2" value="d" style="margin-right: 1rem;">
+                            It is immune to all forms of cryptanalysis
+                        </label>
+                    </div>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--border);">
+                    <button type="button" class="btn btn-outline">Previous Question</button>
+                    
+                    <div style="display: flex; gap: 1rem;">
+                        <button type="button" class="btn btn-outline">Save & Exit</button>
+                        <button type="submit" class="btn">Next Question</button>
+                    </div>
+                </div>
+            </form>
+
+            <div style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--border);">
+                <div style="font-size: 14px; color: var(--text-light); margin-bottom: 1rem;">Quiz Progress</div>
+                <div class="progress-bar" style="height: 2px;">
+                    <div class="progress-fill" style="width: 40%"></div>
+                </div>
+                <div style="font-size: 12px; color: var(--text-lighter); margin-top: 0.5rem;">40% Complete</div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

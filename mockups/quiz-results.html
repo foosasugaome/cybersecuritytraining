@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Results - CyberSecurity Training</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="css/ultra-minimalist.css" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <a href="/" class="logo">CyberSec Training</a>
+            <nav class="nav">
+                <a href="/training/dashboard">Dashboard</a>
+                <a href="/training/modules" class="active">Modules</a>
+                <a href="/training/progress">Progress</a>
+                <a href="/training/certificates">Certificates</a>
+            </nav>
+            <div class="user-menu">
+                <div class="user-info">
+                    <div class="user-name">John Smith</div>
+                    <div class="user-role">Student</div>
+                </div>
+                <div class="user-avatar">JS</div>
+            </div>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="breadcrumb">
+            <a href="/training/dashboard">Dashboard</a> / <a href="/training/modules">Modules</a> / <a href="/training/module/1">Advanced Cryptography</a> / Quiz Results
+        </div>
+
+        <div class="content-full">
+            <!-- Results Header -->
+            <div style="text-align: center; margin-bottom: 5rem;">
+                <div style="font-size: 96px; font-weight: 100; color: var(--success); margin-bottom: 1rem;">85%</div>
+                <div class="page-title" style="margin-bottom: 0.5rem;">Quiz Completed</div>
+                <div class="page-subtitle">Congratulations! You passed the Public Key Cryptography quiz</div>
+            </div>
+
+            <!-- Score Breakdown -->
+            <div class="stats" style="margin-bottom: 4rem;">
+                <div class="stat">
+                    <div class="stat-number" style="color: var(--success);">85</div>
+                    <div class="stat-label">Score %</div>
+                    <div class="stat-change">Passing grade: 70%</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">4</div>
+                    <div class="stat-label">Correct</div>
+                    <div class="stat-change">out of 5 questions</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">12</div>
+                    <div class="stat-label">Minutes</div>
+                    <div class="stat-change">completion time</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">1st</div>
+                    <div class="stat-label">Attempt</div>
+                    <div class="stat-change">excellent work</div>
+                </div>
+            </div>
+
+            <!-- Question Review -->
+            <section>
+                <h2 class="section-title">Question Review</h2>
+                
+                <div class="question" style="padding: 2rem; border: 1px solid var(--border); margin-bottom: 2rem;">
+                    <div style="display: flex; justify-content: between; align-items: flex-start; margin-bottom: 1rem;">
+                        <h3 class="question-title">Question 1: What is the primary purpose of a digital signature?</h3>
+                        <div style="color: var(--success); font-size: 18px;">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-bottom: 1rem;">
+                        <div style="color: var(--text-light); margin-bottom: 0.5rem;">Your Answer:</div>
+                        <div style="color: var(--success);">✓ To provide authentication and non-repudiation</div>
+                    </div>
+                    
+                    <div style="font-size: 14px; color: var(--text-light);">
+                        <strong>Explanation:</strong> Digital signatures provide both authentication (verifying the sender) and non-repudiation (preventing the sender from denying they sent the message).
+                    </div>
+                </div>
+
+                <div class="question" style="padding: 2rem; border: 1px solid var(--border); margin-bottom: 2rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
+                        <h3 class="question-title">Question 2: Which algorithm is commonly used for RSA key generation?</h3>
+                        <div style="color: var(--danger); font-size: 18px;">
+                            <i class="fas fa-times-circle"></i>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-bottom: 1rem;">
+                        <div style="color: var(--text-light); margin-bottom: 0.5rem;">Your Answer:</div>
+                        <div style="color: var(--danger);">✗ SHA-256 hashing</div>
+                        
+                        <div style="color: var(--text-light); margin: 0.5rem 0;">Correct Answer:</div>
+                        <div style="color: var(--success);">✓ Prime number generation and modular arithmetic</div>
+                    </div>
+                    
+                    <div style="font-size: 14px; color: var(--text-light);">
+                        <strong>Explanation:</strong> RSA relies on the mathematical difficulty of factoring large prime numbers. SHA-256 is a hashing algorithm, not used for RSA key generation.
+                    </div>
+                </div>
+
+                <div class="question" style="padding: 2rem; border: 1px solid var(--border); margin-bottom: 2rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
+                        <h3 class="question-title">Question 3: What is the key size typically used for RSA encryption today?</h3>
+                        <div style="color: var(--success); font-size: 18px;">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-bottom: 1rem;">
+                        <div style="color: var(--text-light); margin-bottom: 0.5rem;">Your Answer:</div>
+                        <div style="color: var(--success);">✓ 2048 bits or higher</div>
+                    </div>
+                    
+                    <div style="font-size: 14px; color: var(--text-light);">
+                        <strong>Explanation:</strong> Modern RSA implementations use 2048-bit keys as the minimum standard, with 4096-bit keys recommended for high-security applications.
+                    </div>
+                </div>
+            </section>
+
+            <!-- Next Steps -->
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--border);">
+                <div>
+                    <div style="font-size: 16px; font-weight: 400; margin-bottom: 0.5rem;">Next Step</div>
+                    <div style="color: var(--text-light);">Continue to the next lesson in Advanced Cryptography</div>
+                </div>
+                
+                <div style="display: flex; gap: 1rem;">
+                    <a href="/training/module/1" class="btn btn-outline">Review Module</a>
+                    <a href="/training/lesson/4" class="btn">Next Lesson</a>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

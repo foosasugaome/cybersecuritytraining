@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - CyberSecurity Training</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="css/ultra-minimalist.css" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <a href="/" class="logo">CyberSec Training</a>
+            <nav class="nav">
+                <a href="#" class="active">Admin</a>
+                <a href="/admin/users">Users</a>
+                <a href="/admin/modules">Modules</a>
+                <a href="/admin/companies">Companies</a>
+                <a href="/admin/system">System</a>
+            </nav>
+            <div class="user-menu">
+                <div class="user-info">
+                    <div class="user-name">Admin User</div>
+                    <div class="user-role">Administrator</div>
+                </div>
+                <div class="user-avatar">AU</div>
+            </div>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="page-title">Admin Dashboard</div>
+        <div class="page-subtitle">System overview and management tools</div>
+
+        <section class="stats">
+            <div class="stat">
+                <div class="stat-number">1,247</div>
+                <div class="stat-label">Total Users</div>
+                <div class="stat-change">+42 this week</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">24</div>
+                <div class="stat-label">Active Modules</div>
+                <div class="stat-change">2 pending review</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">8,329</div>
+                <div class="stat-label">Completions</div>
+                <div class="stat-change">+156 this month</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">94%</div>
+                <div class="stat-label">Success Rate</div>
+                <div class="stat-change">+2% improvement</div>
+            </div>
+        </section>
+
+        <div class="content">
+            <section>
+                <h2 class="section-title">Recent Activity</h2>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">User Registrations</div>
+                    </div>
+                    <div class="card-body">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Company</th>
+                                    <th>Registered</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Sarah Connor</td>
+                                    <td>s.connor@techcorp.com</td>
+                                    <td>TechCorp</td>
+                                    <td>2 hours ago</td>
+                                    <td><span style="color: var(--success);">Active</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Mike Johnson</td>
+                                    <td>mike.j@securebank.com</td>
+                                    <td>SecureBank</td>
+                                    <td>4 hours ago</td>
+                                    <td><span style="color: var(--warning);">Pending</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Lisa Wong</td>
+                                    <td>l.wong@datatech.net</td>
+                                    <td>DataTech</td>
+                                    <td>1 day ago</td>
+                                    <td><span style="color: var(--success);">Active</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Module Performance</div>
+                    </div>
+                    <div class="card-body">
+                        <div class="module-list">
+                            <div class="module">
+                                <div class="module-header">
+                                    <div>
+                                        <div class="module-title">Cybersecurity Fundamentals</div>
+                                        <div class="module-meta">487 enrolled • 92% completion rate</div>
+                                    </div>
+                                    <div class="module-progress">
+                                        <a href="/admin/modules/1" class="module-action">Manage</a>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="module">
+                                <div class="module-header">
+                                    <div>
+                                        <div class="module-title">Advanced Threat Detection</div>
+                                        <div class="module-meta">234 enrolled • 87% completion rate</div>
+                                    </div>
+                                    <div class="module-progress">
+                                        <a href="/admin/modules/2" class="module-action">Manage</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <aside class="sidebar">
+                <h2 class="section-title">Quick Actions</h2>
+                
+                <div style="display: flex; flex-direction: column; gap: 1rem; margin-bottom: 3rem;">
+                    <a href="/admin/users/create" class="btn">Add New User</a>
+                    <a href="/admin/modules/create" class="btn btn-outline">Create Module</a>
+                    <a href="/admin/companies/create" class="btn btn-outline">Add Company</a>
+                    <a href="/admin/system/backup" class="btn btn-outline">System Backup</a>
+                </div>
+
+                <h2 class="section-title">System Health</h2>
+                <div style="padding: 2rem 0;">
+                    <div style="margin-bottom: 1.5rem;">
+                        <div style="font-size: 14px; color: var(--text-light); margin-bottom: 0.5rem;">Database</div>
+                        <div style="font-size: 16px; color: var(--success);">
+                            <i class="fas fa-check-circle"></i> Healthy
+                        </div>
+                    </div>
+                    
+                    <div style="margin-bottom: 1.5rem;">
+                        <div style="font-size: 14px; color: var(--text-light); margin-bottom: 0.5rem;">Storage</div>
+                        <div style="font-size: 16px; color: var(--success);">
+                            <i class="fas fa-check-circle"></i> 23% Used
+                        </div>
+                    </div>
+                    
+                    <div style="margin-bottom: 1.5rem;">
+                        <div style="font-size: 14px; color: var(--text-light); margin-bottom: 0.5rem;">Email Service</div>
+                        <div style="font-size: 16px; color: var(--success);">
+                            <i class="fas fa-check-circle"></i> Online
+                        </div>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </main>
+</body>
+</html>
