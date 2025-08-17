@@ -21,20 +21,19 @@
         </div>
     }
 
-    <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <div>
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb mb-2">
-                    <li class="breadcrumb-item"><a asp-area="Admin" asp-page="/Dashboard">Dashboard</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Questions</li>
-                </ol>
-            </nav>
-            <h1 class="h3 mb-0 text-gray-800">Questions</h1>
-        </div>
-        <a asp-area="Admin" asp-page="./Create" class="btn btn-primary">
-            <i class="fas fa-plus"></i> Add New Question
-        </a>
-    </div>
+<div class="breadcrumb">
+    <a asp-area="Admin" asp-page="/Dashboard">Dashboard</a> / Questions
+</div>
+
+<div class="page-title">Questions</div>
+<div class="page-subtitle">Manage quiz questions and options</div>
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="section-title">All Questions</div>
+    <a asp-area="Admin" asp-page="/Questions/Create" class="btn">
+        <i class="fas fa-plus"></i> Add New Question
+    </a>
+</div>
 
     <div class="card shadow mb-4">
         <div class="card-header py-3">
@@ -44,49 +43,61 @@
             @if (Model.Questions.Any())
             {
                 <div class="table-responsive">
-                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <table class="table">
                         <thead>
                             <tr>
-                                <th>Question</th>
-                                <th>Quiz</th>
-                                <th>Lesson</th>
-                                <th>Module</th>
-                                <th>Order</th>
-                                <th>Options</th>
-                                <th>Actions</th>
+                                <th style="width: 60px;">Order</th>
+                                <th style="width: 300px; max-width: 300px;">Question</th>
+                                <th style="width: 200px;">Quiz & Module</th>
+                                <th style="width: 120px;">Options</th>
+                                <th style="width: 140px;">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach (var question in Model.Questions)
                             {
                                 <tr>
-                                    <td>
-                                        <div class="text-truncate" style="max-width: 200px;" title="@question.Text">
+                                    <td class="text-center align-top">
+                                        <span class="badge bg-secondary">#@question.Order</span>
+                                    </td>
+                                    <td class="align-top" style="max-width: 300px; word-wrap: break-word; white-space: normal;">
+                                        <div class="fw-bold" style="color: #333; line-height: 1.4;">
                                             @question.Text
                                         </div>
                                     </td>
-                                    <td>@question.Quiz.Title</td>
-                                    <td>@question.Quiz.Lesson.Title</td>
-                                    <td>@question.Quiz.Lesson.Module.Title</td>
-                                    <td>
-                                        <span class="badge bg-secondary">#@question.Order</span>
+                                    <td class="align-top">
+                                        <div class="fw-bold text-primary" style="font-size: 0.9em;">@question.Quiz.Title</div>
+                                        <small class="text-muted">
+                                            <i class="fas fa-book"></i> @question.Quiz.Lesson.Module.Title
+                                        </small>
+                                        <br>
+                                        <small class="text-secondary">
+                                            <i class="fas fa-file-text"></i> @question.Quiz.Lesson.Title
+                                        </small>
                                     </td>
-                                    <td>
-                                        <span class="badge bg-info">@question.Options.Count options</span>
+                                    <td class="text-center align-top">
+                                        <div>
+                                            <span class="badge bg-info">@question.Options.Count</span>
+                                        </div>
                                         @if (question.Options.Any(o => o.IsCorrect))
                                         {
-                                            <span class="badge bg-success">@question.Options.Count(o => o.IsCorrect) correct</span>
+                                            <div class="mt-1">
+                                                <span class="badge bg-success" style="font-size: 0.7em;">@question.Options.Count(o => o.IsCorrect) correct</span>
+                                            </div>
                                         }
                                     </td>
-                                    <td>
-                                        <div class="btn-group" role="group">
-                                            <a asp-area="Admin" asp-page="./Details" asp-route-id="@question.Id" class="btn btn-sm btn-outline-secondary">
+                                    <td class="align-top">
+                                        <div class="btn-group" role="group" style="white-space: nowrap;">
+                                            <a asp-area="Admin" asp-page="./Details" asp-route-id="@question.Id" 
+                                               class="btn btn-sm btn-outline-secondary" title="View Details">
                                                 <i class="fas fa-eye"></i>
                                             </a>
-                                            <a asp-area="Admin" asp-page="./Edit" asp-route-id="@question.Id" class="btn btn-sm btn-outline-secondary">
+                                            <a asp-area="Admin" asp-page="./Edit" asp-route-id="@question.Id" 
+                                               class="btn btn-sm btn-outline-secondary" title="Edit Question">
                                                 <i class="fas fa-edit"></i>
                                             </a>
-                                            <a asp-area="Admin" asp-page="./Delete" asp-route-id="@question.Id" class="btn btn-sm btn-outline-secondary">
+                                            <a asp-area="Admin" asp-page="./Delete" asp-route-id="@question.Id" 
+                                               class="btn btn-sm btn-outline-secondary" title="Delete Question">
                                                 <i class="fas fa-trash"></i>
                                             </a>
                                         </div>

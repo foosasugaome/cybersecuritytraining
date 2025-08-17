@@ -6,23 +6,13 @@
 
 <div class="container-fluid">
     <!-- Breadcrumb Navigation -->
-    <nav aria-label="breadcrumb" class="mb-4">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item">
-                <a asp-area="Admin" asp-page="/Dashboard">
-                    <i class="fas fa-home"></i> Dashboard
-                </a>
-            </li>
-            <li class="breadcrumb-item">
-                <a asp-area="Admin" asp-page="/Users/Index">
-                    <i class="fas fa-users"></i> Users
-                </a>
-            </li>
-            <li class="breadcrumb-item active" aria-current="page">
-                <i class="fas fa-trash"></i> Delete User
-            </li>
-        </ol>
-    </nav>
+    <div class="breadcrumb">
+        <a asp-area="Admin" asp-page="/Dashboard">Dashboard</a> / 
+        <a asp-area="Admin" asp-page="/Users/Index">Users</a> / Delete User
+    </div>
+
+    <div class="page-title">Delete User</div>
+    <div class="page-subtitle">Remove user from the system</div>
 
     <div class="row justify-content-center">
         <div class="col-md-8">

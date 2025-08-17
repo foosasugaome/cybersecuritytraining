@@ -6,23 +6,13 @@
 
 <div class="container-fluid">
     <!-- Breadcrumb Navigation -->
-    <nav aria-label="breadcrumb" class="mb-4">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item">
-                <a asp-area="Admin" asp-page="/Dashboard">
-                    <i class="fas fa-home"></i> Dashboard
-                </a>
-            </li>
-            <li class="breadcrumb-item">
-                <a asp-area="Admin" asp-page="/Users/Index">
-                    <i class="fas fa-users"></i> Users
-                </a>
-            </li>
-            <li class="breadcrumb-item active" aria-current="page">
-                <i class="fas fa-plus"></i> Create User
-            </li>
-        </ol>
-    </nav>
+    <div class="breadcrumb">
+        <a asp-area="Admin" asp-page="/Dashboard">Dashboard</a> / 
+        <a asp-area="Admin" asp-page="/Users/Index">Users</a> / Create User
+    </div>
+
+    <div class="page-title">Create User</div>
+    <div class="page-subtitle">Add a new user to the system</div>
 
     <div class="row">
         <div class="col-md-8">

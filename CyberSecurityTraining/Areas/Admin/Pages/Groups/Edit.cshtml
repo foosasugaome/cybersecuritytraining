@@ -6,28 +6,14 @@
 
 <div class="container-fluid">
     <!-- Breadcrumb Navigation -->
-    <nav aria-label="breadcrumb" class="mb-4">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item">
-                <a asp-area="Admin" asp-page="/Dashboard">
-                    <i class="fas fa-home"></i> Dashboard
-                </a>
-            </li>
-            <li class="breadcrumb-item">
-                <a asp-area="Admin" asp-page="/Groups/Index">
-                    <i class="fas fa-users"></i> Groups
-                </a>
-            </li>
-            <li class="breadcrumb-item">
-                <a asp-area="Admin" asp-page="/Groups/Details" asp-route-id="@Model.UserGroup.Id">
-                    @Model.UserGroup.Name
-                </a>
-            </li>
-            <li class="breadcrumb-item active" aria-current="page">
-                <i class="fas fa-edit"></i> Edit
-            </li>
-        </ol>
-    </nav>
+    <div class="breadcrumb">
+        <a asp-area="Admin" asp-page="/Dashboard">Dashboard</a> / 
+        <a asp-area="Admin" asp-page="/Groups/Index">Groups</a> / 
+        <a asp-area="Admin" asp-page="/Groups/Details" asp-route-id="@Model.UserGroup.Id">@Model.UserGroup.Name</a> / Edit
+    </div>
+
+    <div class="page-title">Edit Group</div>
+    <div class="page-subtitle">Modify group settings and members</div>
 
     <div class="row">
         <div class="col-md-8">

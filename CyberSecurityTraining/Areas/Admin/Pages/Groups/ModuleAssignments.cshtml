@@ -6,28 +6,14 @@
 
 <div class="container-fluid">
     <!-- Breadcrumb Navigation -->
-    <nav aria-label="breadcrumb" class="mb-4">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item">
-                <a asp-area="Admin" asp-page="/Dashboard">
-                    <i class="fas fa-home"></i> Dashboard
-                </a>
-            </li>
-            <li class="breadcrumb-item">
-                <a asp-area="Admin" asp-page="/Groups/Index">
-                    <i class="fas fa-users"></i> Groups
-                </a>
-            </li>
-            <li class="breadcrumb-item">
-                <a asp-area="Admin" asp-page="/Groups/Details" asp-route-id="@Model.UserGroup.Id">
-                    @Model.UserGroup.Name
-                </a>
-            </li>
-            <li class="breadcrumb-item active" aria-current="page">
-                <i class="fas fa-book"></i> Module Assignments
-            </li>
-        </ol>
-    </nav>
+    <div class="breadcrumb">
+        <a asp-area="Admin" asp-page="/Dashboard">Dashboard</a> / 
+        <a asp-area="Admin" asp-page="/Groups/Index">Groups</a> / 
+        <a asp-area="Admin" asp-page="/Groups/Details" asp-route-id="@Model.UserGroup.Id">@Model.UserGroup.Name</a> / Module Assignments
+    </div>
+
+    <div class="page-title">Module Assignments</div>
+    <div class="page-subtitle">Manage training modules for @Model.UserGroup.Name</div>
 
     <!-- Success/Error Messages -->
     @if (TempData["SuccessMessage"] != null)
@@ -80,40 +66,40 @@
                     @if (Model.AssignedModules.Any())
                     {
                         <div class="table-responsive">
-                            <table class="table table-hover">
+                            <table class="table">
                                 <thead>
                                     <tr>
                                         <th>Module</th>
-                                        <th>Assigned</th>
-                                        <th>Due Date</th>
-                                        <th class="text-center">Progress</th>
-                                        <th class="text-center">Actions</th>
+                                        <th style="width: 140px;">Assigned</th>
+                                        <th style="width: 120px;">Due Date</th>
+                                        <th style="width: 120px;" class="text-center">Progress</th>
+                                        <th style="width: 120px;" class="text-center">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach (var item in Model.AssignedModules)
                                     {
                                         <tr>
-                                            <td>
+                                            <td class="align-top">
                                                 <div>
-                                                    <div class="fw-medium">@item.Assignment.Module.Title</div>
+                                                    <div class="fw-bold">@item.Assignment.Module.Title</div>
                                                     @if (!string.IsNullOrEmpty(item.Assignment.Module.Description))
                                                     {
-                                                        <small class="text-muted">@item.Assignment.Module.Description</small>
+                                                        <small class="text-muted">@(item.Assignment.Module.Description.Length > 60 ? item.Assignment.Module.Description.Substring(0, 60) + "..." : item.Assignment.Module.Description)</small>
                                                     }
                                                 </div>
                                             </td>
-                                            <td>
+                                            <td class="align-top">
                                                 <small class="text-muted">
                                                     @item.Assignment.AssignedAt.ToString("MMM dd, yyyy")
                                                     <br>by @item.Assignment.AssignedBy
                                                 </small>
                                             </td>
-                                            <td>
+                                            <td class="align-top text-center">
                                                 @if (item.Assignment.DueDate.HasValue)
                                                 {
                                                     <span class="badge bg-@(item.Assignment.DueDate.Value < DateTime.Now ? "danger" : "warning")">
-                                                        @item.Assignment.DueDate.Value.ToString("MMM dd, yyyy")
+                                                        @item.Assignment.DueDate.Value.ToString("MMM dd")
                                                     </span>
                                                 }
                                                 else
@@ -121,9 +107,9 @@
                                                     <span class="text-muted">No due date</span>
                                                 }
                                             </td>
-                                            <td class="text-center">
+                                            <td class="align-top text-center">
                                                 <div class="d-flex flex-column align-items-center">
-                                                    <div class="progress mb-1" style="width: 80px; height: 8px;">
+                                                    <div class="progress mb-1" style="width: 60px; height: 6px;">
                                                         <div class="progress-bar bg-@(item.CompletionPercentage >= 80 ? "success" : item.CompletionPercentage >= 50 ? "warning" : "danger")" 
                                                              role="progressbar" 
                                                              style="width: @item.CompletionPercentage%"
@@ -132,16 +118,16 @@
                                                              aria-valuemax="100">
                                                         </div>
                                                     </div>
-                                                    <small class="text-muted">
+                                                    <small class="text-muted" style="font-size: 0.7em;">
                                                         @item.CompletedCount/@item.MemberCount
                                                         (@item.CompletionPercentage.ToString("F0")%)
                                                     </small>
                                                 </div>
                                             </td>
-                                            <td class="text-center">
-                                                <div class="btn-group btn-group-sm" role="group">
+                                            <td class="align-top text-center">
+                                                <div class="btn-group btn-group-sm" role="group" style="white-space: nowrap;">
                                                     <a asp-area="Admin" asp-page="/Modules/Details" asp-route-id="@item.Assignment.Module.Id" 
-                                                       class="btn btn-outline-info" title="View Module">
+                                                       class="btn btn-outline-secondary" title="View Module">
                                                         <i class="fas fa-eye"></i>
                                                     </a>
                                                     <form method="post" asp-page-handler="RemoveAssignment" 
@@ -149,7 +135,7 @@
                                                           asp-route-assignmentId="@item.Assignment.Id" 
                                                           class="d-inline"
                                                           onsubmit="return confirm('Are you sure you want to remove this module assignment? This will remove it for all group members.');">
-                                                        <button type="submit" class="btn btn-outline-danger" title="Remove Assignment">
+                                                        <button type="submit" class="btn btn-outline-secondary" title="Remove Assignment">
                                                             <i class="fas fa-times"></i>
                                                         </button>
                                                     </form>

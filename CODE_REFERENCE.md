@@ -1,9 +1,10 @@
 # CyberSecurity Training Platform - Code Reference
 
-**Version**: Current State as of August 16, 2025  
+**Version**: Current State as of August 17, 2025  
 **Framework**: ASP.NET Core 9.0  
 **Database**: SQLite with Entity Framework Core  
 **Authentication**: ASP.NET Core Identity  
+**Design System**: Ultra-Minimalist CSS Framework  
 
 ---
 
@@ -527,7 +528,7 @@ await _progressService.UpdateModuleProgressAsync(CurrentUser.Id, moduleId);
 - `Markdig` (Markdown processing)
 
 ### **Static Assets**
-- Bootstrap 5.3.0
+- Ultra-Minimalist CSS Framework (custom)
 - Font Awesome 6.4.0
 - jQuery 3.7.0
 - Custom CSS in `/wwwroot/css/`
@@ -573,7 +574,9 @@ dotnet test
 - Certificate generation (PDF)
 - User group management and assignments
 - Admin dashboard with analytics
-- Responsive design with Bootstrap
+- Ultra-minimalist responsive design system
+- Consistent table styling across admin pages
+- Modern information grid layouts
 
 ### **Database State** ✅
 - Fresh database with comprehensive seed data

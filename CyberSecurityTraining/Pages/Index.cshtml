@@ -4,63 +4,89 @@
     ViewData["Title"] = "Home";
 }
 
-<div class="text-center">
-    <div class="jumbotron jumbotron-fluid bg-primary text-white">
-        <div class="container">
-            <h1 class="display-3">
-                <i class="fas fa-shield-alt"></i> CyberSecurity Training Platform
-            </h1>
-            <p class="lead">Enhance your cybersecurity knowledge and protect your organization from digital threats.</p>
+<div class="page-title">
+    CyberSecurity Training Platform
+</div>
+<div class="page-subtitle">
+    Enhance your cybersecurity knowledge and protect your organization from digital threats.
+</div>
+
+<div class="stats">
+    <div class="stat">
+        <div class="stat-number">500+</div>
+        <div class="stat-label">Training Modules</div>
+        <div class="stat-change">+12% this month</div>
+    </div>
+    <div class="stat">
+        <div class="stat-number">10k+</div>
+        <div class="stat-label">Active Users</div>
+        <div class="stat-change">+8% this month</div>
+    </div>
+    <div class="stat">
+        <div class="stat-number">95%</div>
+        <div class="stat-label">Completion Rate</div>
+        <div class="stat-change">+3% this month</div>
+    </div>
+    <div class="stat">
+        <div class="stat-number">24/7</div>
+        <div class="stat-label">Support Available</div>
+        <div class="stat-change">Always online</div>
+    </div>
+</div>
+
+<div class="content">
+    <div>
+        <div class="section-title">Why Choose Our Platform</div>
+        
+        <div class="course-list">
+            <div class="course">
+                <div class="course-header">
+                    <div>
+                        <div class="course-title">Comprehensive Training</div>
+                        <div class="course-meta">Learn from industry experts</div>
+                    </div>
+                </div>
+                <p>Hands-on cybersecurity training modules covering the latest threats and defense strategies.</p>
+            </div>
+            
+            <div class="course">
+                <div class="course-header">
+                    <div>
+                        <div class="course-title">Progress Tracking</div>
+                        <div class="course-meta">Monitor your journey</div>
+                    </div>
+                </div>
+                <p>Detailed progress tracking and assessments to ensure you're mastering the material.</p>
+            </div>
+            
+            <div class="course">
+                <div class="course-header">
+                    <div>
+                        <div class="course-title">Professional Certification</div>
+                        <div class="course-meta">Showcase your knowledge</div>
+                    </div>
+                </div>
+                <p>Earn certificates upon completion to demonstrate your cybersecurity expertise.</p>
+            </div>
+        </div>
+        
+        <div class="mt-5">
+            <a href="/Account/Login" class="btn btn-lg">Get Started Today</a>
         </div>
     </div>
-
-    <div class="container mt-5">
-        <div class="row">
-            <div class="col-md-4">
-                <div class="card h-100">
-                    <div class="card-body text-center">
-                        <i class="fas fa-user-shield fa-3x text-primary mb-3"></i>
-                        <h4>Comprehensive Training</h4>
-                        <p>Learn from industry experts with hands-on cybersecurity training modules.</p>
-                    </div>
-                </div>
+    
+    <div class="sidebar">
+        <div class="achievement">
+            <div class="achievement-icon">
+                <i class="fas fa-shield-alt"></i>
             </div>
-            <div class="col-md-4">
-                <div class="card h-100">
-                    <div class="card-body text-center">
-                        <i class="fas fa-chart-line fa-3x text-success mb-3"></i>
-                        <h4>Track Progress</h4>
-                        <p>Monitor your learning journey with detailed progress tracking and assessments.</p>
-                    </div>
-                </div>
+            <div class="achievement-title">
+                Secure Your Future
             </div>
-            <div class="col-md-4">
-                <div class="card h-100">
-                    <div class="card-body text-center">
-                        <i class="fas fa-certificate fa-3x text-warning mb-3"></i>
-                        <h4>Get Certified</h4>
-                        <p>Earn certificates upon completion to showcase your cybersecurity knowledge.</p>
-                    </div>
-                </div>
+            <div class="achievement-desc">
+                Join thousands of professionals who have enhanced their cybersecurity skills with our comprehensive training platform.
             </div>
-        </div>
-
-        <div class="row mt-5">
-            <div class="col-12 text-center">
-                <h2>Ready to Start Your Cybersecurity Journey?</h2>
-                <p class="lead">Contact your administrator to get started with your training modules.</p>
-                <a href="/Account/Login" class="btn btn-primary btn-lg">
-                    <i class="fas fa-sign-in-alt"></i> Login to Continue
-                </a>
-            </div>
+            <a href="/Account/Login" class="btn btn-outline">Login to Continue</a>
         </div>
     </div>
-</div>del IndexModel
-@{
-    ViewData["Title"] = "Home page";
-}
-
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>

@@ -1,31 +1,159 @@
-html {
-  font-size: 14px;
+/* CyberSecurity Training - Application Specific Styles */
+/* Complementing ultra-minimalist.css with app-specific customizations */
+
+/* Focus states for accessibility */
+.btn:focus, 
+.btn:active:focus {
+    outline: 1px solid var(--text);
+    outline-offset: 2px;
 }
 
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+/* Global form field styling - minimalist bottom border only */
+.form-control, 
+.form-select {
+    border: none;
+    border-bottom: 2px solid #e3e6f0;
+    border-radius: 0;
+    background-color: transparent;
+    transition: all 0.2s ease-in-out;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+.form-control:focus, 
+.form-select:focus {
+    border: none !important;
+    border-bottom: 2px solid #5a5c69 !important;
+    box-shadow: none !important;
+    outline: none !important;
+    background-color: transparent;
 }
 
-html {
-  position: relative;
-  min-height: 100%;
+.form-control:disabled, 
+.form-select:disabled {
+    border-bottom: 2px solid #d1d3e2;
+    background-color: transparent;
+    opacity: 0.7;
 }
 
-body {
-  margin-bottom: 60px;
+/* Exception: Keep multiline text areas with full borders */
+textarea.form-control {
+    border: 1px solid #e3e6f0;
+    border-radius: 4px;
+    background-color: #f8f9fc;
+    padding: 0.75rem;
 }
 
-.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
-  color: var(--bs-secondary-color);
-  text-align: end;
+textarea.form-control:focus {
+    border: 1px solid #5a5c69 !important;
+    background-color: #f8f9fc;
 }
 
-.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
-  text-align: start;
+.form-check-input:focus {
+    outline: 1px solid var(--text);
+    outline-offset: 2px;
+}
+
+/* Ultra-minimalist dropdown functionality */
+.nav-dropdown-toggle {
+    position: relative;
+    cursor: pointer;
+}
+
+/* User menu hover states */
+.user-menu:hover .user-info {
+    opacity: 0.8;
+}
+
+/* Responsive navigation for mobile */
+@media (max-width: 768px) {
+    .nav {
+        display: none;
+    }
+    
+    .header-content {
+        flex-wrap: wrap;
+    }
+    
+    .user-menu {
+        margin-top: 1rem;
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* Custom form validation styles */
+.form-control.is-invalid, 
+.form-select.is-invalid {
+    border-bottom-color: #dc3545 !important;
+}
+
+.form-control.is-valid, 
+.form-select.is-valid {
+    border-bottom-color: #28a745 !important;
+}
+
+/* Exception: Validation for textareas */
+textarea.form-control.is-invalid {
+    border: 1px solid #dc3545 !important;
+}
+
+textarea.form-control.is-valid {
+    border: 1px solid #28a745 !important;
+}
+
+/* Loading states */
+.btn.loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.btn.loading::after {
+    content: "...";
+    margin-left: 0.5rem;
+}
+
+/* Custom alert styles for ultra-minimalist design */
+.alert {
+    padding: 1rem 0;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid currentColor;
+    font-size: 14px;
+}
+
+/* Progress indicators */
+.progress-indicator {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background: var(--text-lighter);
+    border-radius: 50%;
+    margin-right: 0.5rem;
+}
+
+.progress-indicator.active {
+    background: var(--text);
+}
+
+.progress-indicator.completed {
+    background: var(--success);
+}
+
+/* Custom scrollbar for webkit browsers */
+::-webkit-scrollbar {
+    width: 1px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-alt);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--border);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--text-lighter);
 }

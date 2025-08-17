@@ -21,20 +21,19 @@
         </div>
     }
 
-    <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <div>
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb mb-2">
-                    <li class="breadcrumb-item"><a asp-area="Admin" asp-page="/Dashboard">Dashboard</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Users</li>
-                </ol>
-            </nav>
-            <h1 class="h3 mb-0 text-gray-800">Users</h1>
-        </div>
-        <a asp-area="Admin" asp-page="/Users/Create" class="btn btn-primary">
-            <i class="fas fa-plus"></i> Add New User
-        </a>
-    </div>
+<div class="breadcrumb">
+    <a asp-area="Admin" asp-page="/Dashboard">Dashboard</a> / Users
+</div>
+
+<div class="page-title">Users</div>
+<div class="page-subtitle">Manage user accounts and permissions</div>
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="section-title">All Users</div>
+    <a asp-area="Admin" asp-page="/Users/Create" class="btn">
+        <i class="fas fa-plus"></i> Add New User
+    </a>
+</div>
 
     <div class="card shadow mb-4">
         <div class="card-header py-3">
@@ -44,7 +43,7 @@
             @if (Model.Users.Any())
             {
                 <div class="table-responsive">
-                    <table class="table table-bordered table-striped">
+                    <table class="table">
                         <thead>
                             <tr>
                                 <th>Name</th>

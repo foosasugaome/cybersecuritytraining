@@ -6,23 +6,13 @@
 
 <div class="container-fluid">
     <!-- Breadcrumb Navigation -->
-    <nav aria-label="breadcrumb" class="mb-4">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item">
-                <a asp-area="Admin" asp-page="/Dashboard">
-                    <i class="fas fa-home"></i> Dashboard
-                </a>
-            </li>
-            <li class="breadcrumb-item">
-                <a asp-area="Admin" asp-page="/Users/Index">
-                    <i class="fas fa-users"></i> Users
-                </a>
-            </li>
-            <li class="breadcrumb-item active" aria-current="page">
-                <i class="fas fa-user"></i> User Details
-            </li>
-        </ol>
-    </nav>
+    <div class="breadcrumb">
+        <a asp-area="Admin" asp-page="/Dashboard">Dashboard</a> / 
+        <a asp-area="Admin" asp-page="/Users/Index">Users</a> / User Details
+    </div>
+
+    <div class="page-title">User Details</div>
+    <div class="page-subtitle">View user information and activity</div>
 
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800">
@@ -96,7 +86,7 @@
                     @if (Model.GroupMemberships.Any())
                     {
                         <div class="table-responsive">
-                            <table class="table table-bordered">
+                            <table class="table">
                                 <thead>
                                     <tr>
                                         <th>Group Name</th>

@@ -123,6 +123,73 @@ p {
     display: flex;
     align-items: center;
     gap: 1rem;
+    position: relative;
+}
+
+.user-menu-dropdown {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    cursor: pointer;
+    position: relative;
+}
+
+.user-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    min-width: 200px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.2s ease;
+    z-index: 1000;
+    margin-top: 10px;
+}
+
+.user-menu-dropdown:hover .user-dropdown,
+.user-dropdown:hover {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.user-dropdown a,
+.user-dropdown button {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 1.5rem;
+    color: var(--text);
+    text-decoration: none;
+    border: none;
+    background: none;
+    width: 100%;
+    text-align: left;
+    font-family: inherit;
+    font-size: 14px;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.user-dropdown a:hover,
+.user-dropdown button:hover {
+    opacity: 0.6;
+    background: var(--bg-alt);
+}
+
+.user-dropdown .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 0.5rem 0;
+}
+
+.user-dropdown i {
+    width: 16px;
+    font-size: 12px;
+    color: var(--text-light);
 }
 
 .user-info {
@@ -198,6 +265,15 @@ p {
     grid-template-columns: repeat(4, 1fr);
     gap: 3rem;
     margin-bottom: 5rem;
+}
+
+/* Two-column stats for centered display */
+.stats.stats-2 {
+    grid-template-columns: repeat(2, 1fr);
+    justify-content: center;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .stat {
@@ -482,6 +558,7 @@ p {
     padding: 1rem 0;
     border-bottom: 1px solid var(--border);
     text-align: left;
+    vertical-align: middle;
 }
 
 .table th {
@@ -498,6 +575,24 @@ p {
 
 .table tr:hover {
     opacity: 0.7;
+}
+
+/* Action buttons in tables */
+.table td .btn {
+    padding: 6px 12px;
+    margin-right: 0.5rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 32px;
+}
+
+.table td .btn:last-child {
+    margin-right: 0;
+}
+
+.table td .btn i {
+    font-size: 12px;
 }
 
 /* Sidebar */
@@ -735,6 +830,12 @@ p {
     .header-content {
         padding: 0 1rem;
     }
+    
+    .user-dropdown {
+        right: -1rem;
+        left: auto;
+        min-width: 180px;
+    }
 }
 
 @media (max-width: 480px) {
@@ -749,5 +850,45 @@ p {
     
     .page-title {
         font-size: 28px;
+    }
+}
+
+/* Information Grid for Details Pages */
+.info-grid {
+    display: grid;
+    gap: 2rem;
+    grid-template-columns: 1fr;
+}
+
+.info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.info-label {
+    font-size: 12px;
+    color: var(--text-light);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 400;
+}
+
+.info-value {
+    font-size: 16px;
+    color: var(--text);
+    line-height: 1.5;
+}
+
+@media (min-width: 768px) {
+    .info-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 3rem 4rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    .info-grid {
+        grid-template-columns: 1fr 1fr 1fr;
     }
 }

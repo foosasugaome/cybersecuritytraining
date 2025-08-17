@@ -21,7 +21,8 @@ A comprehensive cybersecurity training management system built with ASP.NET Core
 - **🗄️ Database Management**: Controlled data seeding and management tools
 
 ### User Experience
-- **📱 Responsive Design**: Bootstrap 5-based UI that works on all devices
+- **🎨 Ultra-Minimalist Design**: Clean, professional interface with consistent styling
+- **📱 Responsive Design**: Mobile-first approach that works seamlessly on all devices
 - **🎯 Training Dashboard**: Overview of assigned modules with progress indicators
 - **📖 Interactive Lessons**: Structured content delivery with progress tracking
 - **🧪 Quiz Taking**: Engaging quiz interface with immediate feedback
@@ -32,7 +33,7 @@ A comprehensive cybersecurity training management system built with ASP.NET Core
 ### Technology Stack
 - **Backend**: ASP.NET Core 9.0
 - **Database**: Entity Framework Core with SQLite
-- **Frontend**: Razor Pages with Bootstrap 5
+- **Frontend**: Razor Pages with Ultra-Minimalist CSS Framework
 - **Authentication**: ASP.NET Core Identity
 - **PDF Generation**: iText7 for certificate creation
 - **Architecture**: Areas-based admin interface with user portal
@@ -43,6 +44,13 @@ A comprehensive cybersecurity training management system built with ASP.NET Core
 - **Module Assignments**: Both group-based and direct user assignments
 - **Progress Tracking**: Comprehensive tracking of lesson and module progress
 - **Quiz Results**: Detailed scoring and answer tracking
+
+### Design System
+- **Ultra-Minimalist Framework**: Custom CSS framework for clean, professional appearance
+- **Responsive Grid**: Mobile-first approach with flexible layouts
+- **Component Library**: Reusable components (stat-cards, info-grids, buttons)
+- **Consistent Typography**: Standardized text hierarchy and spacing
+- **Clean Tables**: Minimal borders with subtle hover effects for better UX
 
 ## 🚦 Getting Started
 

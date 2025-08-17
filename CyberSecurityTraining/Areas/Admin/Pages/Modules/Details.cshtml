@@ -5,33 +5,73 @@
 }
 
 <div class="container-fluid">
-    <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <div>
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb mb-2">
-                    <li class="breadcrumb-item"><a asp-area="Admin" asp-page="/Dashboard">Dashboard</a></li>
-                    <li class="breadcrumb-item"><a asp-area="Admin" asp-page="./Index">Training Modules</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">@Model.Module.Title</li>
-                </ol>
-            </nav>
-            <h1 class="h3 mb-0 text-gray-800">Module Details</h1>
+    <!-- Success/Error Messages -->
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle"></i> @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
-        <div>
-            <a asp-area="Admin" asp-page="./Edit" asp-route-id="@Model.Module.Id" class="btn btn-warning">
-                <i class="fas fa-edit"></i> Edit
-            </a>
-            <a asp-area="Admin" asp-page="./Index" class="btn btn-secondary">
-                <i class="fas fa-arrow-left"></i> Back to List
-            </a>
+    }
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="fas fa-exclamation-circle"></i> @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <div class="breadcrumb">
+        <a asp-area="Admin" asp-page="/Dashboard">Dashboard</a> / 
+        <a asp-area="Admin" asp-page="/Modules/Index">Training Modules</a> / @Model.Module.Title
+    </div>
+
+    <div class="page-title">Module Details</div>
+    <div class="page-subtitle">@Model.Module.Title</div>
+
+    <div class="d-flex justify-content-end mb-4 gap-2">
+        <a asp-area="Admin" asp-page="./Edit" asp-route-id="@Model.Module.Id" class="btn btn-outline-secondary">
+            <i class="fas fa-edit"></i> Edit
+        </a>
+        <a asp-area="Admin" asp-page="./Index" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left"></i> Back to List
+        </a>
+    </div>
+
+    <!-- Statistics -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="stat-card">
+                <div class="stat-number">@Model.Lessons.Count</div>
+                <div class="stat-label">Lessons</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card">
+                <div class="stat-number">@Model.TotalQuizzes</div>
+                <div class="stat-label">Quizzes</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card">
+                <div class="stat-number">@Model.AssignedUsers</div>
+                <div class="stat-label">Users Assigned</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card">
+                <div class="stat-number">@Model.AssignedGroups</div>
+                <div class="stat-label">Groups Assigned</div>
+            </div>
         </div>
     </div>
 
     <div class="row">
         <!-- Module Information -->
-        <div class="col-md-8">
+        <div class="col-md-12">
             <div class="card shadow mb-4">
                 <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">Module Information</h6>
+                    <h5 class="m-0 font-weight-bold text-primary">Module Information</h5>
                 </div>
                 <div class="card-body">
                     <dl class="row">
@@ -65,35 +105,6 @@
                 </div>
             </div>
         </div>
-
-        <!-- Statistics -->
-        <div class="col-md-4">
-            <div class="card shadow mb-4">
-                <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-success">Statistics</h6>
-                </div>
-                <div class="card-body">
-                    <div class="row text-center">
-                        <div class="col-6 mb-3">
-                            <div class="h4 font-weight-bold text-primary">@Model.Lessons.Count</div>
-                            <div class="text-gray-600 small">Lessons</div>
-                        </div>
-                        <div class="col-6 mb-3">
-                            <div class="h4 font-weight-bold text-info">@Model.TotalQuizzes</div>
-                            <div class="text-gray-600 small">Quizzes</div>
-                        </div>
-                        <div class="col-6">
-                            <div class="h4 font-weight-bold text-success">@Model.AssignedUsers</div>
-                            <div class="text-gray-600 small">Users Assigned</div>
-                        </div>
-                        <div class="col-6">
-                            <div class="h4 font-weight-bold text-warning">@Model.AssignedGroups</div>
-                            <div class="text-gray-600 small">Groups Assigned</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
 
     <!-- Lessons -->
@@ -101,7 +112,7 @@
         <div class="col-12">
             <div class="card shadow mb-4">
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h6 class="m-0 font-weight-bold text-primary">Lessons (@Model.Lessons.Count)</h6>
+                    <h5 class="m-0 font-weight-bold text-primary">Lessons (@Model.Lessons.Count)</h5>
                     <a asp-area="Admin" asp-page="/Lessons/Create" asp-route-moduleId="@Model.Module.Id" class="btn btn-primary btn-sm">
                         <i class="fas fa-plus"></i> Add Lesson
                     </a>
@@ -110,7 +121,7 @@
                     @if (Model.Lessons.Any())
                     {
                         <div class="table-responsive">
-                            <table class="table table-bordered table-striped">
+                            <table class="table">
                                 <thead>
                                     <tr>
                                         <th>Order</th>

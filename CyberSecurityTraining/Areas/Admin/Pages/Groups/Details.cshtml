@@ -6,23 +6,13 @@
 
 <div class="container-fluid">
     <!-- Breadcrumb Navigation -->
-    <nav aria-label="breadcrumb" class="mb-4">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item">
-                <a asp-area="Admin" asp-page="/Dashboard">
-                    <i class="fas fa-home"></i> Dashboard
-                </a>
-            </li>
-            <li class="breadcrumb-item">
-                <a asp-area="Admin" asp-page="/Groups/Index">
-                    <i class="fas fa-users"></i> Groups
-                </a>
-            </li>
-            <li class="breadcrumb-item active" aria-current="page">
-                <i class="fas fa-info-circle"></i> @Model.UserGroup.Name
-            </li>
-        </ol>
-    </nav>
+    <div class="breadcrumb">
+        <a asp-area="Admin" asp-page="/Dashboard">Dashboard</a> / 
+        <a asp-area="Admin" asp-page="/Groups/Index">Groups</a> / @Model.UserGroup.Name
+    </div>
+
+    <div class="page-title">Group Details</div>
+    <div class="page-subtitle">View and manage @Model.UserGroup.Name information</div>
 
     <!-- Success/Error Messages -->
     @if (TempData["SuccessMessage"] != null)
@@ -149,7 +139,7 @@
                     @if (Model.ActiveMembers.Any())
                     {
                         <div class="table-responsive">
-                            <table class="table table-hover">
+                            <table class="table">
                                 <thead>
                                     <tr>
                                         <th>Name</th>
