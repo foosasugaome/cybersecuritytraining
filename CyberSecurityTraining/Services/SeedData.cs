@@ -66,8 +66,8 @@ namespace CyberSecurityTraining.Services
             {
                 var adminUser = new ApplicationUser
                 {
-                    UserName = "admin@cybersec.local",
-                    Email = "admin@cybersec.local",
+                    UserName = "admin@admin.local",
+                    Email = "admin@admin.local",
                     FirstName = "System",
                     LastName = "Administrator",
                     EmailConfirmed = true,
