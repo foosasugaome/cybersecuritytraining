@@ -495,6 +495,10 @@ CREATE TABLE UserComprehensiveCertificates (
 
 **Current State:** Production-ready with comprehensive certificate system fully operational
 
+### 🔗 Related Documentation
+- **[TODO.md](./TODO.md)** - Comprehensive roadmap and feature backlog for future improvements
+- **[README.md](./README.md)** - Project overview and setup instructions
+
 ---
 **Last Updated:** August 16, 2025 (Afternoon Session Completed)  
 **Build Status:** ✅ Success  
