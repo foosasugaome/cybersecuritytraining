@@ -182,7 +182,7 @@ namespace CyberSecurityTraining.Areas.Admin.Pages.Questions
                     throw;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 ModelState.AddModelError(string.Empty, "An error occurred while updating the question. Please try again.");
                 Question = questionToUpdate;

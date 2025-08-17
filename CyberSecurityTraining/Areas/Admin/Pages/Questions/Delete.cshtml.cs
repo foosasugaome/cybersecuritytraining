@@ -80,7 +80,7 @@ namespace CyberSecurityTraining.Areas.Admin.Pages.Questions
 
                     TempData["SuccessMessage"] = "Question deleted successfully.";
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     TempData["ErrorMessage"] = "An error occurred while deleting the question. Please try again.";
                     return RedirectToPage("./Details", new { id = question.Id });

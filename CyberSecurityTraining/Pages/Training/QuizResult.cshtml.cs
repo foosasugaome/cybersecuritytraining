@@ -58,7 +58,7 @@ namespace CyberSecurityTraining.Pages.Training
                 return NotFound();
             }
 
-            Quiz = QuizResult.Quiz;
+            Quiz = QuizResult.Quiz!;
 
             // Get the module this quiz belongs to
             Module = await _context.Modules
@@ -79,7 +79,7 @@ namespace CyberSecurityTraining.Pages.Training
             }
 
             // Build question reviews
-            await BuildQuestionReviewsAsync();
+            BuildQuestionReviews();
 
             return Page();
         }
@@ -99,7 +99,7 @@ namespace CyberSecurityTraining.Pages.Training
             return hasGroupAccess || hasDirectAccess;
         }
 
-        private async Task BuildQuestionReviewsAsync()
+        private void BuildQuestionReviews()
         {
             QuestionReviews = new List<QuestionReview>();
 

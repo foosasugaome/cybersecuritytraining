@@ -26,7 +26,7 @@ namespace CyberSecurityTraining.Areas.Admin.Pages.Users
         
         public List<Company> Companies { get; set; } = new();
         public List<UserGroup> UserGroups { get; set; } = new();
-        public ApplicationUser User { get; set; } = null!;
+        public new ApplicationUser User { get; set; } = null!;
 
         public class InputModel
         {

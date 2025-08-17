@@ -38,11 +38,12 @@ namespace CyberSecurityTraining.Pages.Training
 
         public async Task<IActionResult> OnGetAsync(int? moduleId)
         {
-            CurrentUser = await _userManager.GetUserAsync(User);
-            if (CurrentUser == null)
+            var currentUser = await _userManager.GetUserAsync(User);
+            if (currentUser == null)
             {
                 return Challenge();
             }
+            CurrentUser = currentUser;
 
             // Check if this is a comprehensive certificate request (no moduleId)
             if (moduleId == null)
@@ -114,11 +115,12 @@ namespace CyberSecurityTraining.Pages.Training
 
         public async Task<IActionResult> OnPostDownloadAsync(int? moduleId)
         {
-            CurrentUser = await _userManager.GetUserAsync(User);
-            if (CurrentUser == null)
+            var currentUser = await _userManager.GetUserAsync(User);
+            if (currentUser == null)
             {
                 return Challenge();
             }
+            CurrentUser = currentUser;
 
             // Check if this is a comprehensive certificate download
             if (moduleId == null)
@@ -169,11 +171,12 @@ namespace CyberSecurityTraining.Pages.Training
 
         private async Task<IActionResult> DownloadModuleCertificateAsync(int moduleId)
         {
-            CurrentUser = await _userManager.GetUserAsync(User);
-            if (CurrentUser == null)
+            var currentUser = await _userManager.GetUserAsync(User);
+            if (currentUser == null)
             {
                 return Challenge();
             }
+            CurrentUser = currentUser;
 
             Module = await _context.Modules
                 .Where(m => m.Id == moduleId && m.IsActive)
@@ -209,7 +212,7 @@ namespace CyberSecurityTraining.Pages.Training
                 
                 return File(certificateBytes, "application/pdf", fileName);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 TempData["ErrorMessage"] = "An error occurred while generating the certificate. Please try again.";
                 return RedirectToPage();

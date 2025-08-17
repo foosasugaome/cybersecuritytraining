@@ -20,7 +20,7 @@ namespace CyberSecurityTraining.Areas.Admin.Pages.Users
             _userManager = userManager;
         }
 
-        public ApplicationUser User { get; set; } = null!;
+        public new ApplicationUser User { get; set; } = null!;
         public List<UserGroupMembership> GroupMemberships { get; set; } = new();
         public List<string> UserRoles { get; set; } = new();
 

@@ -75,7 +75,7 @@ namespace CyberSecurityTraining.Areas.Admin.Pages.Modules
         {
             if (!ModelState.IsValid)
             {
-                Module = await _context.Modules.FirstOrDefaultAsync(m => m.Id == Input.Id);
+                Module = await _context.Modules.FirstOrDefaultAsync(m => m.Id == Input.Id) ?? new Module();
                 return Page();
             }
 
@@ -83,7 +83,7 @@ namespace CyberSecurityTraining.Areas.Admin.Pages.Modules
             if (_context.Modules.Any(m => m.Order == Input.Order && m.Id != Input.Id))
             {
                 ModelState.AddModelError("Input.Order", "A module with this order already exists. Please choose a different order.");
-                Module = await _context.Modules.FirstOrDefaultAsync(m => m.Id == Input.Id);
+                Module = await _context.Modules.FirstOrDefaultAsync(m => m.Id == Input.Id) ?? new Module();
                 return Page();
             }
 

@@ -65,7 +65,7 @@ namespace CyberSecurityTraining.Areas.Admin.Pages.Companies
         {
             if (!ModelState.IsValid)
             {
-                Company = await _context.Companies.FirstOrDefaultAsync(m => m.Id == Input.Id);
+                Company = await _context.Companies.FirstOrDefaultAsync(m => m.Id == Input.Id) ?? new Company();
                 return Page();
             }
 

@@ -91,40 +91,4 @@ app.MapStaticAssets();
 app.MapRazorPages()
    .WithStaticAssets();
 
-// Test endpoint for certificate generation
-app.MapGet("/test-certificate", async (ICertificateService certificateService) =>
-{
-    try
-    {
-        var testUser = new ApplicationUser
-        {
-            FirstName = "Test",
-            LastName = "User",
-            Email = "test@example.com"
-        };
-        
-        var testModule = new Module
-        {
-            Id = 1,
-            Title = "Test Security Module",
-            Description = "A test module for certificate generation"
-        };
-        
-        var certificateBytes = await certificateService.GenerateCertificateAsync(testUser, testModule);
-        
-        if (certificateBytes != null && certificateBytes.Length > 0)
-        {
-            return Results.File(certificateBytes, "application/pdf", "test_certificate.pdf");
-        }
-        else
-        {
-            return Results.Text("Certificate generation failed - empty result", "text/plain", statusCode: 500);
-        }
-    }
-    catch (Exception ex)
-    {
-        return Results.Text($"Error: {ex.Message}", "text/plain", statusCode: 500);
-    }
-});
-
 app.Run();
